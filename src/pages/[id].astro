@@ -1,4 +1,10 @@
 ---
+const url = Astro.request.url;
+let special = "%F0%9F%8D%80";
 
+if (url.includes(special)) {
+	return Astro.redirect("/", 307);
+}
 ---
-<div>HOLA</div>
+
+<div>{url}</div>
