@@ -1,0 +1,20 @@
+---
+interface Props {
+	title: string;
+	helpText: string;
+}
+
+const { title, helpText } = Astro.props;
+---
+
+<div class="grid w-full gap-2">
+	<div class="flex items-center gap-2 tooltip tooltip-bottom" data-tip={helpText}>
+        <div>
+            {title}
+        </div>
+         <div class="text-info w-4 h-4 text-xs flex items-center justify-center border-[1px] border-info rounded-full">
+            ?
+        </div>
+	</div>
+	<slot />
+</div>
