@@ -3,20 +3,48 @@ import Section from "./Section.astro";
 ---
 
 <Section
-	name="Background Image"
+	name="Background"
 	info="Your image that will show up, make sure the object is in the center because it will cropped to fit the screen 📱"
-	class="w-full h-32 relative">
-	<input
-		type="file"
-		name="image"
-		id="image"
-		accept="image/jpeg,image/png,image/webp"
-		class="w-full h-full opacity-0 absolute top-0 left-0 cursor-pointer"
-	/>
-	<label
-		for="image"
-		class="w-full h-full border-success border-2 border-dashed rounded-lg flex items-center justify-center text-center text-gray-500 cursor-pointer">
-        
-		<span> Click or bring it here 👌</span>
-	</label>
+	class="w-full grid grid-cols-3 gap-4">
+	<div class="col-span-2 flex flex-col space-y-2 w-full">
+		<span class="text-sm font-semibold text-neutral-content opacity-50">Image</span>
+		<div class="relative w-full h-32">
+			<input
+				type="file"
+				name="image"
+				id="image"
+				accept="image/jpeg,image/png,image/webp"
+				class="w-full h-full opacity-0 absolute top-0 left-0 cursor-pointer"
+			/>
+			<label
+				for="image"
+				class="w-full h-full border-success border-2 border-dashed rounded-lg flex items-center justify-center text-center text-base-content cursor-pointer">
+				<span> Click or bring it here 👌</span>
+			</label>
+		</div>
+	</div>
+
+	<div class="flex flex-col space-y-2 w-full">
+		<span class="text-sm font-semibold text-neutral-content opacity-50">Color</span>
+		<div class="flex items-center justify-start gap-4 w-full h-full rounded-xl border-neutral border-2">
+			<input type="color" name="bg-color" id="bg-color" class="hidden" />
+			<label for="bg-color" class="cursor-pointer w-full h-full flex-col flex items-center justify-center text-base-content rounded-xl" id="colorTarget">
+				<span>🎨</span>
+				<span>Get your color</span>
+			</label>
+		</div>
+	</div>
 </Section>
+
+<script>
+	const colorTarget: HTMLElement = document.getElementById("colorTarget")!;
+	const colorInput: HTMLInputElement = document.getElementById("bg-color")! as HTMLInputElement;
+
+	document.onload = () => {
+		colorInput.value = colorTarget.style.backgroundColor;
+	};
+
+	colorInput.addEventListener("input", (e: Event) => {
+		colorTarget.style.backgroundColor = (e.target as HTMLInputElement).value;
+	});
+</script>

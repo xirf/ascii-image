@@ -1,10 +1,17 @@
 ---
-import BackgroundColor from "./BackgroundColor.astro";
 import Text from "./Text.astro";
 import UploadImage from "./UploadImage.astro";
 ---
-<div class="grid">
-    <UploadImage />
-    <BackgroundColor />
-    <Text />
+
+<div class="flex flex-col relative w-full h-full">
+	<div class="grid">
+		<UploadImage />
+		<Text />
+	</div>
+	<div class="absolute bottom-0 left-0 w-full">
+		<div class="w-full grid grid-cols-2 gap-4 p-4">
+			<button class="btn btn-success">Save</button>
+			<button class="btn btn-info">Preview</button>
+		</div>
+	</div>
 </div>
