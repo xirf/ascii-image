@@ -1,0 +1,39 @@
+---
+import Bars3Icon from "./icons/Bars.astro";
+import GithubIcon from "./icons/Github.astro";
+import TrashIcon from "./icons/Trash.astro";
+import ShieldIcon from "./icons/Shield.astro";
+import ScaleIcon from "./icons/Scale.astro";
+---
+
+<header class="bg-neutral px-4 py-2 m-2 rounded-2xl flex items-center justify-between">
+	<h1 class="text-2xl font-bold">
+		<span class="text-success">🍀 A</span>S<span class="text-success">CI</span>I <span class="text-xs opacity-50">v.1.0.0</span>
+	</h1>
+	<nav class="flex items-center justify-center">
+		<a
+			aria-label="Github"
+			target="_blank"
+			href="https://github.com/xirf/ascii-image"
+			rel="noopener, noreferrer"
+			class="btn btn-ghost drawer-button btn-square normal-case">
+			<GithubIcon />
+		</a>
+		<div class="dropdown dropdown-bottom dropdown-left">
+			<label tabindex="0" class="btn btn-ghost drawer-button btn-square normal-case">
+				<Bars3Icon />
+			</label>
+			<ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 border-2 border-neutral">
+				<li>
+					<a href="/delete">🗑️ Request Deletion</a>
+				</li>
+				<li>
+					<a href="/tos">🤝 Term of Service</a>
+				</li>
+				<li>
+					<a href="/privacy">⚖️ Privacy Policy</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+</header>

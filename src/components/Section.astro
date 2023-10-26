@@ -1,0 +1,22 @@
+---
+interface Props {
+	name: string;
+	info: string;
+    class?: string;
+}
+const { name, info, class: className } = Astro.props
+---
+
+<div class="w-full p-4 grid gap-2">
+	<div class="dropdown dropdown-bottom dropdown-hover cursor-help">
+		<label tabindex="0" class="text-lg font-bold cursor-help">{name}</label>
+		<div tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 border-2 border-neutral text-xs">
+			<h3>
+				{info}
+			</h3>
+		</div>
+	</div>
+	<div class={className ?? "w-full relative"}>
+		<slot />
+	</div>
+</div>

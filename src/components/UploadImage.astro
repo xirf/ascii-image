@@ -1,0 +1,23 @@
+---
+import Section from "./Section.astro";
+---
+
+<Section
+	name="Background Image"
+	info="Your image that will show up, make sure the object is in the center because it will cropped to fit the screen 📱"
+	class="w-full h-32 relative">
+	<input
+		type="file"
+		name="image"
+		id="image"
+		accept="image/jpeg,image/png,image/webp"
+		class="w-full h-full opacity-0 absolute top-0 left-0 cursor-pointer"
+	/>
+	<label
+		for="image"
+		class="w-full h-full border-success border-2 border-dashed rounded-lg flex items-center justify-center text-center text-gray-500 cursor-pointer">
+		<span>
+            Click or bring it here 👌
+        </span>
+	</label>
+</Section>
