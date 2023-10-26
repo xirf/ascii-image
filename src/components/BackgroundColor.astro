@@ -2,15 +2,13 @@
 import Section from "./Section.astro";
 ---
 
-<Section 
-	name="Background Color" 
-	info="Adjust your background so it fits your image 😉, sometime you need to adjust the color to make it more visible" 
+<Section
+	name="Background Color"
+	info="Adjust your background so it fits your image 😉, sometime you need to adjust the color to make it more visible"
 	class="w-full relative flex items-center justify-start gap-4">
 	<div class="w-20 h-10 bg-base-100 border-2 border-neutral rounded-md" id="colorTarget"></div>
 	<input type="color" name="bg-color" id="bg-color" class="hidden" />
-	<label for="bg-color" class="cursor-pointer">
-		Get your color
-	</label>
+	<label for="bg-color" class="cursor-pointer"> Get your color 🎨</label>
 </Section>
 
 <script>

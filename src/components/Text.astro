@@ -1,10 +1,83 @@
 ---
 import Section from "./Section.astro";
-
 ---
-<Section
-name="Text"
-info="Let's decorate your image with bunch of text🫡, you can select from template or make yours, but if your text to short it will be looped until 5K character 😨 (just kidding i will try to optimize it based on your font size 😜)"
->
 
+<Section
+	name="Text"
+	info="Let's decorate your image with bunch of text🫡, you can select from template or make yours, but if your text to short it will be looped until 5K character 😨 (just kidding i will try to optimize it based on your font size 😜)">
+	<div class="grid gap-4">
+		<div class="grid gap-4">
+			<div class="flex flex-col space-y-2 w-full">
+				<label for="template" class="text-sm font-semibold text-neutral-content opacity-50">Template Text</label>
+				<select id="template" name="template" class="select w-full select-bordered">
+					{
+						[
+							"Cinderella",
+							"Snow White",
+							"Beauty and the Beast",
+							"Little Red Riding Hood",
+							"Hansel and Gretel",
+							"The Little Mermaid by Hans Christian Andersen",
+							"The Ugly Duckling by Hans Christian Andersen",
+							"Rumpelstiltskin",
+							"The Three Little Pigs",
+							"Sleeping Beauty",
+							"Pride and Prejudice by Jane Austen",
+							"Alice's Adventures in Wonderland by Lewis Carroll",
+							"Moby-Dick by Herman Melville",
+							"Dracula by Bram Stoker",
+							"Frankenstein by Mary Shelley",
+							"Jane Eyre by Charlotte Brontë",
+							"Great Expectations by Charles Dickens",
+							"Wuthering Heights by Emily Brontë",
+							"The Picture of Dorian Gray by Oscar Wilde",
+							"Sherlock Holmes by Arthur Conan Doyle",
+						].map((font) => <option value={font}>{font}</option>)
+					}
+				</select>
+			</div>
+			<div class="flex flex-col space-y-2">
+				<label for="text" class="text-sm font-semibold text-neutral-content opacity-50">Content</label>
+				<textarea
+					id="text"
+					name="text"
+					rows="5"
+					class="textarea textarea-bordered w-full"
+					placeholder="Enter your text here, write as much as possible if it not enough it will be looped until 5K character 😨"></textarea>
+			</div>
+			<div class="flex w-full gap-4">
+				<div class="flex flex-col space-y-2 w-full">
+					<label for="font" class="text-sm font-semibold text-neutral-content opacity-50">Font</label>
+					<select id="font" name="font" class="select w-full select-bordered">
+						{
+							[
+								"Arial",
+								"Arial Black",
+								"Arial Narrow",
+								"Arial Rounded MT Bold",
+								"Avant Garde",
+								"Calibri",
+								"Candara",
+								"Century Gothic",
+								"Franklin Gothic Medium",
+								"Futura",
+								"Geneva",
+								"Gill Sans",
+								"Helvetica",
+								"Impact",
+								"Lucida Grande",
+								"Optima",
+								"Segoe UI",
+								"Tahoma",
+							].map((font) => <option value={font}>{font}</option>)
+						}
+					</select>
+				</div>
+				<div class="flex flex-col space-y-2 w-full">
+					<label for="size" class="text-sm font-semibold text-neutral-content opacity-50">Size</label>
+					<input id="size" name="size" type="number" class="input input-bordered w-full" placeholder="Enter your text here..." value="12" />
+				</div>
+			</div>
+		</div>
+	</div>
 </Section>
