@@ -12,6 +12,7 @@
   "dependencies": {
     "@astrojs/tailwind": "^5.0.2",
     "@astrojs/vercel": "^5.1.0",
+    "@types/node": "^20.8.9",
     "astro": "^3.3.4",
     "daisyui": "^3.9.3",
     "nanostores": "^0.9.4",
