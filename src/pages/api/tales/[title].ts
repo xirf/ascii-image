@@ -7,7 +7,7 @@ export const GET: APIRoute = async ({ params }) => {
         if (!params.title) return new Response(JSON.stringify({ message: "No title provided" }), { status: 400 })
 
         const content = fs.readFileSync(path.join(process.cwd(), "src", "assets", params.title + ".txt"), "utf-8");
-        params.content = content;
+        params.content = content.replaceAll('\n', "").replaceAll('\r', "");
         params.title = params.title.replaceAll('-', " ")
 
         return new Response(JSON.stringify(params))

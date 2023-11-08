@@ -9,6 +9,7 @@ import Section from "./Section.astro";
 	<div class="col-span-2 flex flex-col space-y-2 w-full">
 		<span class="text-sm font-semibold text-neutral-content opacity-50">Image</span>
 		<div class="relative w-full h-32">
+			<div class="w-full h-full absolute -z-10 bg-cover bg-center rounded-lg bg-no-repeat" id="imagepreview"></div>
 			<input
 				type="file"
 				name="image"
@@ -18,6 +19,7 @@ import Section from "./Section.astro";
 			/>
 			<label
 				for="image"
+				id="imageLabel"
 				class="w-full h-full border-success border-2 border-dashed rounded-lg flex items-center justify-center text-center text-base-content cursor-pointer">
 				<span> Click or bring it here 👌</span>
 			</label>
@@ -26,9 +28,12 @@ import Section from "./Section.astro";
 
 	<div class="flex flex-col space-y-2 w-full">
 		<span class="text-sm font-semibold text-neutral-content opacity-50">Color</span>
-		<div class="flex items-center justify-start gap-4 w-full h-full rounded-xl border-neutral border-2">
+		<div class="flex items-center justify-start gap-4 w-full h-full rounded-lg border-neutral border-2">
 			<input type="color" name="bg-color" id="bg-color" class="hidden" />
-			<label for="bg-color" class="cursor-pointer w-full h-full flex-col flex items-center justify-center text-base-content rounded-xl" id="colorTarget">
+			<label
+				for="bg-color"
+				class="cursor-pointer w-full h-full flex-col flex items-center justify-center text-base-content rounded-xl"
+				id="colorTarget">
 				<span>🎨</span>
 				<span>Get your color</span>
 			</label>
@@ -37,14 +42,41 @@ import Section from "./Section.astro";
 </Section>
 
 <script>
+	import { pageState } from "../store/store";
+
 	const colorTarget: HTMLElement = document.getElementById("colorTarget")!;
 	const colorInput: HTMLInputElement = document.getElementById("bg-color")! as HTMLInputElement;
+	const imageInput: HTMLInputElement = document.getElementById("image")! as HTMLInputElement;
+	const imagePreview: HTMLElement = document.getElementById("imagepreview")!;
 
 	document.onload = () => {
 		colorInput.value = colorTarget.style.backgroundColor;
 	};
 
-	colorInput.addEventListener("input", (e: Event) => {
-		colorTarget.style.backgroundColor = (e.target as HTMLInputElement).value;
+	let pageStateContent = pageState.get();
+
+	colorInput.addEventListener("change", (e) => {
+		pageState.set({
+			...pageStateContent,
+			color: colorInput.value,
+		});
 	});
+
+	imageInput.addEventListener("change", async () => {
+		let image = imageInput.files![0];
+		if (!image) return;
+		let imageBuffer = await image.arrayBuffer();
+		let base64String = btoa(new Uint8Array(imageBuffer).reduce((data, byte) => data + String.fromCharCode(byte), ""));
+
+		imagePreview.style.backgroundImage = `url(data:image/png;base64,${base64String})`;
+		imagePreview.classList.add("border-2", "border-neutral");
+		document.getElementById("imageLabel")!.classList.add("hidden");
+
+		pageState.set({
+			...pageStateContent,
+			image: base64String,
+		});
+	});
+
+	pageState.subscribe((state) => (pageStateContent = state));
 </script>

@@ -13,13 +13,39 @@ import Settings from "../components/Settings.astro";
 		<title>ACI - Image behid text</title>
 	</head>
 	<body class="h-screen w-full flex">
-		<div class="w-full p-2 h-full">
-			<div class="mockup-browser h-full bg-base-300">
-				<div class="mockup-browser-toolbar">
-					<div class="input">https://aci.andka.me/🍀</div>
+		<div class="w-full p-2 h-full relative">
+			<div class="h-full box-border relative flex flex-col bg-base-200 rounded-xl">
+				<div class="flex items-center gap-2 px-4">
+					<div class="flex items-center gap-2 p-4 opacity-50 grow">
+						{Array.from({ length: 3 }).map((_, i) => <div class="w-4 h-4 bg-base-content rounded-xl" />)}
+					</div>
+					<div class="w-96 max-w-sm p-2 box-border">
+						<div class="input h-10 border-1 border-neutral flex items-center justify-center">https://aci.andka.me/🍀</div>
+					</div>
+					<div class="grow"></div>
 				</div>
-				<div class="preview">
-					
+				<div class="p-2 grow">
+					<div class="preview h-full bg-base-300 rounded-xl">
+						<div class="w-full h-full flex-col flex items-center justify-center relative">
+							<div class="max-w-xl text-center grid gap-4">
+								<p class="text-6xl">🍀</p>
+								<h1 class="text-3xl font-bold">Let's start by messing around with panel on the right 👉</h1>
+								<p>
+									this just a tool to help you create images with text behind them. this project is completely open source and you
+									can find the <a href="https://github.com/xirf/aci" target="_blank" class="text-success">source code here</a>.
+								</p>
+							</div>
+							<div class="absolute bottom-10 opacity-50 text-xs">
+								Made by <a href="https://github.com/xirf" target="_blank" class="text-success" rel="noopener noreferrer">xirf</a> with
+								<a href="https://astro.build" target="_blank" rel="noopener noreferrer" class="text-warning">Astro</a> and <a
+									href="http://daisyui.com"
+									class="text-success"
+									target="_blank"
+									rel="noopener noreferrer">DaisyUI</a
+								>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -31,5 +57,14 @@ import Settings from "../components/Settings.astro";
 </html>
 
 <script>
+	import { pageState } from "../store/store";
+	import type { PageState } from "../store/store";
+
 	window.history.replaceState({}, "", `/🍀`);
+
+	pageState.subscribe((state: PageState) => {
+		console.log(state);
+	});
+
+	const previewWindow = document.querySelector(".preview");
 </script>
