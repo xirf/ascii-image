@@ -24,9 +24,9 @@ import Settings from "../components/Settings.astro";
 					</div>
 					<div class="grow"></div>
 				</div>
-				<div class="p-2 grow">
-					<div class="preview h-full bg-base-300 rounded-xl">
-						<div class="w-full h-full flex-col flex items-center justify-center relative">
+				<div class="p-2 grow overflow-hidden">
+					<div class="preview h-full rounded-xl">
+						<!-- <div class="w-full h-full flex-col flex items-center justify-center relative bg-base-300">
 							<div class="max-w-xl text-center grid gap-4">
 								<p class="text-6xl">🍀</p>
 								<h1 class="text-3xl font-bold">Let's start by messing around with panel on the right 👉</h1>
@@ -44,6 +44,10 @@ import Settings from "../components/Settings.astro";
 									rel="noopener noreferrer">DaisyUI</a
 								>
 							</div>
+						</div> -->
+						<div
+							id="preview-template"
+							class="w-full h-full whitespace-break-spaces break-all overflow-hidden bg-clip-text text-transparent bg-cover bg-no-repeat">
 						</div>
 					</div>
 				</div>
@@ -67,4 +71,26 @@ import Settings from "../components/Settings.astro";
 	});
 
 	const previewWindow = document.querySelector(".preview");
+
+	const previewTemplate = document.querySelector("#preview-template")! as HTMLElement;
+
+	function calculateCharacterToFill(text: string, fontSize: number, width: number, height: number) {
+		const canvas = document.createElement("canvas");
+		const ctx = canvas.getContext("2d")!;
+		ctx.font = `${fontSize}px sans-serif`;
+		const textWidth = ctx.measureText(text).width;
+		const textHeight = fontSize;
+		const textArea = textWidth * textHeight;
+		const area = width * height;
+		const characters = Math.floor(area / textArea);
+		return characters;
+	}
+
+	let text =
+		"Once upon a time, there was a kind and beautiful young woman named Cinderella. She lived with her wicked stepmother and two stepsisters, who were cruel and jealous of her beauty and grace. They made her do all the household chores, and she was forced to wear old rags while they dressed in fine clothes.One day, the king's palace announced a grand royal ball, inviting all the maidens in the kingdom to attend. Cinderella's stepsisters were excited about the event, and they demanded that she help them get ready. As they left for the ball, they left Cinderella behind, taunting her and making her feel miserable.Cinderella, heartbroken, sat by the fireplace crying. Suddenly, her tears attracted the attention of her fairy godmother, who appeared and used her magic to transform Cinderella's rags into a beautiful gown, give her glass slippers, and provide her with a magical ride to the palace in a pumpkin carriage. She had to leave the palace by midnight, as the spell would wear off then.At the ball, Cinderella was the most beautiful woman in the room, and the prince fell in love with her at first sight. They danced and talked all evening, but as midnight approached, Cinderella remembered her fairy godmother's warning. She rushed out of the palace, leaving behind one of her glass slippers as she fled.The prince searched the kingdom for the owner of the lost slipper. He eventually arrived at Cinderella's home. Her stepsisters tried to fit into the slipper, but it only fit Cinderella. When she produced the other glass slipper, the prince knew she was the one he had been searching for.Cinderella and the prince were married, and she forgave her stepsisters for their cruelty. They lived happily ever after, and Cinderella was no longer mistreated but lived as a beloved princess.";
+
+	let characterToFill = calculateCharacterToFill(text, 16, previewTemplate.clientWidth, previewTemplate.clientHeight);
+	previewTemplate.innerText = text.repeat(characterToFill + 1);
+	previewTemplate.style.fontSize = "16px";
+	previewTemplate.style.backgroundImage = "url(https://picsum.photos/seed/1/200/300)";
 </script>
