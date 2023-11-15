@@ -5,9 +5,9 @@ import { Icon } from "astro-icon";
 <div class="grid grid-cols-2 gap-4">
 	<div class="flex flex-col space-y-2">
 		<span class="text-sm font-semibold text-neutral-content opacity-50">Line Height</span>
-		<input type="range" min="1" max="5" value="3" class="range range-xs" step="1" />
+		<input type="range" min="1" max="5" value="3" class="range range-xs" step="1" id="lineh" />
 		<div class="w-full flex justify-between text-xs px-2">
-			{Array.from({ length: 5 }, (_, i) => i + 1).map((i) => <span class="w-1 h-2 rounded-xl bg-base-content" ></span>)}
+			{Array.from({ length: 5 }, (_, i) => i + 1).map((i) => <span class="w-1 h-2 rounded-xl bg-base-content" />)}
 		</div>
 	</div>
 	<div class="flex flex-col space-y-2">
@@ -17,8 +17,8 @@ import { Icon } from "astro-icon";
 				["left", "center", "right", "justify"].map((el) => (
 					<div>
 						<input type="radio" name="aligment" value={el} class="hidden" checked={el === "left"} />
-						<label class={`${el === 'left' && "btn-success"} btn btn-sm p-1`} id={el}>
-							<Icon pack="fluent" name={`text-align-${el}-20-filled`} size="sm"  />
+						<label class={`${el === "left" && "btn-success"} btn btn-sm p-1`} id={el}>
+							<Icon pack="fluent" name={`text-align-${el}-20-filled`} size="sm" />
 						</label>
 					</div>
 				))
@@ -26,3 +26,27 @@ import { Icon } from "astro-icon";
 		</div>
 	</div>
 </div>
+
+<script>
+	import { pageState } from "../../store/store";
+
+	const lineh = document.getElementById("lineh")! as HTMLInputElement;
+	const aligment = document.getElementsByName("aligment")! as NodeListOf<HTMLInputElement>;
+	let state = pageState.get();
+
+	lineh.addEventListener("input", (e) => {
+		state.font.lineHeight = parseInt((e.target as HTMLInputElement).value);
+		pageState.set(state);
+	});
+
+	aligment.forEach((el) => {
+		el.addEventListener("change", (e) => {
+			state.font.align = (e.target as HTMLInputElement).value;
+			pageState.set(state);
+		});
+	});
+
+	pageState.subscribe((s) => {
+		state = s;
+	});
+</script>

@@ -6,7 +6,9 @@ export interface PageState {
     text: null | String,
     font: {
         name: String,
-        size: number
+        size: number,
+        lineHeight: number,
+        align: String
     }
 }
 
@@ -17,6 +19,8 @@ export const pageState = atom<PageState>({
     text: null,
     font: {
         name: "arial",
-        size: 12
+        size: 12,
+        lineHeight: 1.5,
+        align: "left"
     }
 })
