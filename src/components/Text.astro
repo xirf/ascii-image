@@ -1,19 +1,8 @@
 ---
 import Section from "./Section.astro";
-import fs from "fs";
-
-// @ts-ignore
-String.prototype.toSentenceCase = function () {
-	return this.replace(/([a-z])([A-Z])/g, "$1 $2")
-		.replace(/([A-Z])([A-Z])/g, "$1 $2")
-		.replace(/\b[a-z]/g, (letter) => letter.toUpperCase());
-};
-
-let tales = fs
-	.readdirSync(fs.realpathSync("./src/assets/"))
-	.filter((file) => file.endsWith(".txt"))
-	// @ts-ignore
-	.map((file) => file.replace(".txt", "").replaceAll("-", " ").toSentenceCase());
+import Fill from "./text/Fill.astro"
+import Font from "./text/Font.astro"
+import FontStyle from "./text/FontStyle.astro"
 ---
 
 <Section
@@ -21,139 +10,9 @@ let tales = fs
 	info="Let's decorate your image with bunch of text🫡, you can select from template or make yours, but if your text to short it will be looped until 5K character 😨 (just kidding i will try to optimize it based on your font size 😜)">
 	<div class="grid gap-4">
 		<div class="grid gap-4">
-			<div class="flex flex-col space-y-2 w-full">
-				<label for="template" class="text-sm font-semibold text-neutral-content opacity-50">Text for fill</label>
-				<select id="template" name="template" class="select w-full select-bordered">
-					{["Custom", ...tales].map((font) => <option value={font}>{font}</option>)}
-				</select>
-			</div>
-			<div class="flex flex-col space-y-2">
-				<label for="text" class="text-sm font-semibold text-neutral-content opacity-50">Content</label>
-				<textarea
-					id="text"
-					name="text"
-					rows="5"
-					class="textarea textarea-bordered w-full"
-					placeholder="Enter your text here, write as much as possible if it not enough it will be looped until it fill up the screen 😜"
-				></textarea>
-			</div>
-			<div class="flex w-full gap-4">
-				<div class="flex flex-col space-y-2 w-full">
-					<label for="font" class="text-sm font-semibold text-neutral-content opacity-50">Font</label>
-					<select id="font" name="font" class="select w-full select-bordered">
-						{
-							[
-								"Arial",
-								"Arial Black",
-								"Arial Narrow",
-								"Arial Rounded MT Bold",
-								"Avant Garde",
-								"Calibri",
-								"Candara",
-								"Century Gothic",
-								"Franklin Gothic Medium",
-								"Futura",
-								"Geneva",
-								"Gill Sans",
-								"Helvetica",
-								"Impact",
-								"Lucida Grande",
-								"Optima",
-								"Segoe UI",
-								"Tahoma",
-							].map((font) => <option value={font}>{font}</option>)
-						}
-					</select>
-				</div>
-				<div class="flex flex-col space-y-2 w-full">
-					<label for="size" class="text-sm font-semibold text-neutral-content opacity-50">Size</label>
-					<input id="size" name="size" type="number" class="input input-bordered w-full" placeholder="Enter your text here..." value="12" />
-				</div>
-			</div>
-			<div class="grid grid-cols-2 gap-4">
-				<div class="flex flex-col space-y-2">
-					<span class="text-sm font-semibold text-neutral-content opacity-50">Line Height</span>
-					<input type="range" min="1" max="5" value="3" class="range range-xs" step="1" />
-					<div class="w-full flex justify-between text-xs px-2">
-						<span>|</span>
-						<span>|</span>
-						<span>|</span>
-						<span>|</span>
-						<span>|</span>
-					</div>
-				</div>
-				<div class="flex flex-col space-y-2">
-					<span class="text-sm font-semibold text-neutral-content opacity-50">Aligment</span>
-					<div class="flex items-center justify-around gap-2 px-2">
-						
-					</div>
-				</div>
-			</div>
+			<Fill />
+			<Font />
+			<FontStyle />
 		</div>
 	</div>
 </Section>
-
-<script>
-	import { pageState } from "../store/store";
-
-	let template = document.getElementById("template") as HTMLSelectElement;
-	let text = document.getElementById("text") as HTMLTextAreaElement;
-	let font = document.getElementById("font") as HTMLSelectElement;
-	let fsize = document.getElementById("size") as HTMLInputElement;
-
-	let pageStateContent = pageState.get();
-	let cachedText: Record<string, string> = {};
-
-	template.addEventListener("change", async (e) => {
-		if (template.value !== "Custom") {
-			if (cachedText[template.value]) {
-				text.value = cachedText[template.value];
-			} else {
-				await fetch(`/api/tales/${template.value.replaceAll(/ /g, "-").toLowerCase()}`)
-					.then((res) => res.json())
-					.then((res) => {
-						text.value = res.content;
-						cachedText[template.value] = res.content;
-					});
-			}
-
-			pageState.set({
-				...pageStateContent,
-				text: text.value,
-			});
-		}
-	});
-
-	text.addEventListener("input", (e) => {
-		template.selectedIndex = 0;
-
-		pageState.set({
-			...pageStateContent,
-			text: text.value,
-		});
-	});
-
-	font.addEventListener("change", (e) => {
-		pageState.set({
-			...pageStateContent,
-			font: {
-				name: font.value,
-				size: pageStateContent.font.size,
-			},
-		});
-	});
-
-	fsize.addEventListener("input", (e) => {
-		pageState.set({
-			...pageStateContent,
-			text: {
-				...pageStateContent.text,
-				size: fsize.value,
-			},
-		});
-	});
-
-	pageState.subscribe((state) => {
-		pageStateContent = state;
-	});
-</script>

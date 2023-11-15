@@ -1,0 +1,33 @@
+---
+import fs from "fs";
+
+// @ts-ignore
+String.prototype.toSentenceCase = function () {
+	return this.replace(/([a-z])([A-Z])/g, "$1 $2")
+		.replace(/([A-Z])([A-Z])/g, "$1 $2")
+		.replace(/\b[a-z]/g, (letter) => letter.toUpperCase());
+};
+
+let tales = fs
+	.readdirSync(fs.realpathSync("./src/assets/"))
+	.filter((file) => file.endsWith(".txt"))
+	// @ts-ignore
+	.map((file) => file.replace(".txt", "").replaceAll("-", " ").toSentenceCase());
+---
+
+<div class="flex flex-col space-y-2 w-full">
+	<label for="template" class="text-sm font-semibold text-neutral-content opacity-50">Text for fill</label>
+	<select id="template" name="template" class="select w-full select-bordered">
+		{["Custom", ...tales].map((font) => <option value={font}>{font}</option>)}
+	</select>
+</div>
+<div class="flex flex-col space-y-2">
+    <label for="text" class="text-sm font-semibold text-neutral-content opacity-50">Content</label>
+    <textarea
+        id="text"
+        name="text"
+        rows="5"
+        class="textarea textarea-bordered w-full"
+        placeholder="Enter your text here, write as much as possible if it not enough it will be looped until it fill up the screen 😜"
+    ></textarea>
+</div>
