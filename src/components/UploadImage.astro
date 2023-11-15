@@ -56,10 +56,7 @@ import Section from "./Section.astro";
 	let pageStateContent = pageState.get();
 
 	colorInput.addEventListener("change", (e) => {
-		pageState.set({
-			...pageStateContent,
-			color: colorInput.value,
-		});
+		pageState.setKey('color', colorInput.value)
 	});
 
 	imageInput.addEventListener("change", async () => {
@@ -68,14 +65,13 @@ import Section from "./Section.astro";
 		let imageBuffer = await image.arrayBuffer();
 		let base64String = btoa(new Uint8Array(imageBuffer).reduce((data, byte) => data + String.fromCharCode(byte), ""));
 
-		imagePreview.style.backgroundImage = `url(data:image/png;base64,${base64String})`;
+		let base64Image =  `data:image/png;base64,${base64String}`;
+
+		imagePreview.style.backgroundImage = `url(${base64Image})`;
 		imagePreview.classList.add("border-2", "border-neutral");
 		document.getElementById("imageLabel")!.classList.add("hidden");
 
-		pageState.set({
-			...pageStateContent,
-			image: base64String,
-		});
+		pageState.setKey('image', base64Image)
 	});
 
 	pageState.subscribe((state) => (pageStateContent = state));

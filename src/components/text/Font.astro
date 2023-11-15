@@ -1,40 +1,54 @@
-
 <div class="flex w-full gap-4">
-    <div class="flex flex-col space-y-2 w-full">
-        <label for="font" class="text-sm font-semibold text-neutral-content opacity-50">Font</label>
-        <select id="font" name="font" class="select w-full select-bordered">
-            {
-                [
-                    "Arial",
-                    "Arial Black",
-                    "Arial Narrow",
-                    "Arial Rounded MT Bold",
-                    "Avant Garde",
-                    "Calibri",
-                    "Candara",
-                    "Century Gothic",
-                    "Franklin Gothic Medium",
-                    "Futura",
-                    "Geneva",
-                    "Gill Sans",
-                    "Helvetica",
-                    "Impact",
-                    "Lucida Grande",
-                    "Optima",
-                    "Segoe UI",
-                    "Tahoma",
-                ].map((font) => <option value={font}>{font}</option>)
-            }
-        </select>
-    </div>
-    <div class="flex flex-col space-y-2 w-full">
-        <label for="size" class="text-sm font-semibold text-neutral-content opacity-50">Size</label>
-        <input id="size" name="size" type="number" class="input input-bordered w-full" placeholder="Enter your text here..." value="12" />
-    </div>
+	<div class="flex flex-col space-y-2 w-full">
+		<label for="font" class="text-sm font-semibold text-neutral-content opacity-50">Font</label>
+		<select id="font" name="font" class="select w-full select-bordered">
+			{
+				[
+					"Arial",
+					"Arial Black",
+					"Arial Narrow",
+					"Arial Rounded MT Bold",
+					"Avant Garde",
+					"Calibri",
+					"Candara",
+					"Century Gothic",
+					"Franklin Gothic Medium",
+					"Futura",
+					"Geneva",
+					"Gill Sans",
+					"Helvetica",
+					"Impact",
+					"Lucida Grande",
+					"Optima",
+					"Segoe UI",
+					"Tahoma",
+				].map((font) => <option value={font}>{font}</option>)
+			}
+		</select>
+	</div>
+	<div class="flex flex-col space-y-2 w-full">
+		<label for="size" class="text-sm font-semibold text-neutral-content opacity-50">Size</label>
+		<input id="size" name="size" type="number" class="input input-bordered w-full" min="1" step="1" value="12" />
+	</div>
 </div>
 
 <script>
-    const font = document.getElementById('font')! as HTMLSelectElement;
-    const size = document.getElementById('size')! as HTMLInputElement;  
+	import { pageState } from "../../store/store";
 
+	let isAlerted = localStorage.getItem("isAlerted") || false;
+
+	const font = document.getElementById("font")! as HTMLSelectElement;
+	const size = document.getElementById("size")! as HTMLInputElement;
+
+	font.addEventListener("change", () => {
+		pageState.setKey("fontFamily", font.value);
+	});
+
+	size.addEventListener("change", () => {
+		if (parseInt(size.value) < 7 && !isAlerted) {
+			alert("Font size is too small, it may cause some lag issue in some browsers.");
+			localStorage.setItem("isAlerted", "true");
+		}
+		pageState.setKey("fontSize", parseInt(size.value));
+	});
 </script>

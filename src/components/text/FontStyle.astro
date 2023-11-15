@@ -1,5 +1,6 @@
 ---
 import { Icon } from "astro-icon";
+const align = ["left", "center", "right", "justify"];
 ---
 
 <div class="grid grid-cols-2 gap-4">
@@ -12,15 +13,13 @@ import { Icon } from "astro-icon";
 	</div>
 	<div class="flex flex-col space-y-2">
 		<span class="text-sm font-semibold text-neutral-content opacity-50">Aligment</span>
-		<div class="flex items-center justify-around gap-2 px-2">
+		<div class="join overflow-hidden">
+			{align.map((el) => <input type="radio" name="aligment" value={el} class="hidden" checked={el === "left"} id={el} />)}
 			{
-				["left", "center", "right", "justify"].map((el) => (
-					<div>
-						<input type="radio" name="aligment" value={el} class="hidden" checked={el === "left"} />
-						<label class={`${el === "left" && "btn-success"} btn btn-sm p-1`} id={el}>
-							<Icon pack="fluent" name={`text-align-${el}-20-filled`} size="sm" />
-						</label>
-					</div>
+				align.map((el) => (
+					<label class={`${el === "left" && "btn-success"} btn join-item btn-sm`} id={el} for={el}>
+						<Icon pack="fluent" name={`text-align-${el}-20-filled`} size="24" />
+					</label>
 				))
 			}
 		</div>
@@ -31,22 +30,26 @@ import { Icon } from "astro-icon";
 	import { pageState } from "../../store/store";
 
 	const lineh = document.getElementById("lineh")! as HTMLInputElement;
-	const aligment = document.getElementsByName("aligment")! as NodeListOf<HTMLInputElement>;
-	let state = pageState.get();
+	const aligment = document.querySelectorAll("input[name=aligment]")! as NodeListOf<HTMLInputElement>;
+	const labels = document.querySelectorAll("label")! as NodeListOf<HTMLLabelElement>;
 
-	lineh.addEventListener("input", (e) => {
-		state.font.lineHeight = parseInt((e.target as HTMLInputElement).value);
-		pageState.set(state);
+	lineh.addEventListener("input", () => {
+		pageState.setKey("lineHeight", parseInt(lineh.value));
 	});
 
 	aligment.forEach((el) => {
-		el.addEventListener("change", (e) => {
-			state.font.align = (e.target as HTMLInputElement).value;
-			pageState.set(state);
-		});
-	});
+		el.addEventListener("change", () => {
+			if (el.checked) {
+				labels.forEach((label) => {
+					if (label.id === el.id) {
+						label.classList.add("btn-success");
+					} else {
+						label.classList.remove("btn-success");
+					}
+				});
+			}
 
-	pageState.subscribe((s) => {
-		state = s;
+			pageState.setKey("align", el.value);
+		});
 	});
 </script>

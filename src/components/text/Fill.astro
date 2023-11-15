@@ -22,12 +22,40 @@ let tales = fs
 	</select>
 </div>
 <div class="flex flex-col space-y-2">
-    <label for="text" class="text-sm font-semibold text-neutral-content opacity-50">Content</label>
-    <textarea
-        id="text"
-        name="text"
-        rows="5"
-        class="textarea textarea-bordered w-full"
-        placeholder="Enter your text here, write as much as possible if it not enough it will be looped until it fill up the screen 😜"
-    ></textarea>
+	<label for="text" class="text-sm font-semibold text-neutral-content opacity-50">Content</label>
+	<textarea
+		id="text"
+		name="text"
+		rows="5"
+		class="textarea textarea-bordered w-full"
+		placeholder="Enter your text here, write as much as possible if it not enough it will be looped until it fill up the screen 😜"></textarea>
 </div>
+
+<script>
+	import { pageState } from "../../store/store";
+
+	const template = document.getElementById("template")! as HTMLSelectElement;
+	const text = document.getElementById("text")! as HTMLTextAreaElement;
+
+	async function getTales(title: string): Promise<string> {
+		if (title === "Custom") return "";
+		let res = await fetch(`/api/tales/${title.replaceAll(" ", "-").toLowerCase()}`);
+		if(res.status <= 200 && res.status >= 300){
+			return "something went wrong";
+		}
+
+		return await res.json().then(json => json.content)
+	}
+
+	template.addEventListener("change", async () => {
+		const title = template.value;
+		const tale = await getTales(title);
+		text.value = tale;
+		pageState.setKey('text', text.value);
+	});
+
+	text.addEventListener('change', ()=>{
+		template.selectedIndex = 0;
+		pageState.setKey('text', text.value);
+	})
+</script>
