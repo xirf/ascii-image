@@ -1,5 +1,3 @@
-export { };
-
 declare global {
     interface String {
         toSentenceCase(): string;
@@ -15,3 +13,14 @@ interface PageState {
     lineHeight: number,
     align: "left" | "center" | "right" | "justify"
 }
+
+interface CalculateCharacterOptions {
+    text: string;
+    fontSize: number;
+    lineHeight: number;
+    width: number;
+    height: number;
+    family: string;
+}
+
+export type { PageState, CalculateCharacterOptions };

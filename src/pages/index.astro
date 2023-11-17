@@ -2,6 +2,7 @@
 import Block from "../components/Block.astro";
 import Header from "../components/Header.astro";
 import Settings from "../components/Settings.astro";
+import { Icon } from "astro-icon";
 ---
 
 <html lang="en">
@@ -15,7 +16,7 @@ import Settings from "../components/Settings.astro";
 	<body class="h-screen w-full lg:overflow-hidden flex flex-col relative lg:flex-row">
 		<div class="w-full p-2 h-[90vh] duration-500 transition-all ease-in-out shrink-0 lg:shrink lg:h-screen">
 			<div class="h-full box-border relative flex flex-col bg-base-200 rounded-xl">
-				<div class="items-center px-4 hidden lg:flex lg:gap-2 ">
+				<div class="items-center px-4 hidden lg:flex lg:gap-2">
 					<div class="flex items-center gap-2 p-4 opacity-50 grow cursor-pointer">
 						{["#FF5F56", "#FFBD2E", "#27C93F"].map((el) => <div class="w-4 h-4 rounded-xl" style={`background: ${el}`} />)}
 					</div>
@@ -37,9 +38,7 @@ import Settings from "../components/Settings.astro";
 											>source code here</a
 										>.
 									</p>
-									<p class="lg:hidden text-xs opacity-75 mt-16">
-										Scroll down to see the panel
-									</p>
+									<p class="lg:hidden text-xs opacity-75 mt-16">Scroll down to see the panel</p>
 								</div>
 								<div class="absolute bottom-10 opacity-50 text-xs">
 									Made by <a href="https://github.com/xirf" target="_blank" class="text-success" rel="noopener noreferrer">xirf</a>
@@ -57,36 +56,41 @@ import Settings from "../components/Settings.astro";
 				</div>
 			</div>
 		</div>
-		<section class="w-full shrink-0 lg:max-w-md h-screen flex flex-col bg-base-100 ">
+		<section class="w-full shrink-0 lg:max-w-md h-screen flex flex-col bg-base-100">
 			<Header />
 			<Settings />
 		</section>
+
+		<dialog id="loadingModal" class="modal modal-open modal-bottom sm:modal-middle">
+			<div class="modal-box text-center">
+				<!-- <h3 class="font-bold text-xl">Please Wait 😇</h3>
+				<p class="py-4 max-w-md">
+					We are uploading your image to our server, this may take a while depending on your internet connection. Please be patient.
+				</p>
+				<span class="loading loading-dots loading-lg"></span> -->
+				<h3 class="font-bold text-xl">Upload Complete 🥳</h3>
+				<p class="py-4 max-w-md">Here is your url, click to copy and share it with others.</p>
+				<div class="join ">
+					<input class="input input-bordered join-item select-all" value="https://index" />
+					<button class="btn join-item col-span-2">
+						<Icon name="lucide:copy" size="16" />
+						<span>Copy</span>
+					</button>
+				</div>
+			</div>
+		</dialog>
 	</body>
 </html>
 
 <script>
 	import { pageState, buttonState } from "../store/store";
-
-	// Add some spice
-	window.history.replaceState({}, "", `/🍀`);
+	import { calculateCharacterToFill } from "../utils/calculateCharacterToFill";
 
 	const previewWindow = document.querySelector(".preview")! as HTMLElement;
 	const previewTemplate = document.querySelector("#preview-template")! as HTMLElement;
 
-	/* Calculate the approximate character needed to fill the view
-	 * to do this we can use use canvas element and simulate it on that
-	 */
-	function calculateCharacterToFill(text: string, fontSize: number, lineHeight: number, width: number, height: number, family: string) {
-		const canvas = document.createElement("canvas");
-		const ctx = canvas.getContext("2d")!;
-		ctx.font = `${fontSize}px ${family.replaceAll(" ", "-").toLowerCase()}`;
-		const textWidth = ctx.measureText(text).width;
-		const textHeight = fontSize * lineHeight;
-		const textArea = textWidth * textHeight;
-		const area = width * height;
-		const characters = Math.floor(area / textArea);
-		return characters;
-	}
+	// Add some spice
+	window.history.replaceState({}, "", `/🍀`);
 
 	let inittial = JSON.stringify(pageState.get());
 	pageState.subscribe((state) => {
@@ -96,14 +100,14 @@ import Settings from "../components/Settings.astro";
 
 	function update(state: ReturnType<typeof pageState.get>) {
 		const { image, color, text, fontSize, fontFamily, lineHeight, align } = state;
-		const characterToFill = calculateCharacterToFill(
+		const characterToFill = calculateCharacterToFill({
 			text,
 			fontSize,
 			lineHeight,
-			previewTemplate.clientWidth,
-			previewTemplate.clientHeight,
-			fontFamily
-		);
+			width: previewTemplate.clientWidth,
+			height: previewTemplate.clientHeight,
+			family: fontFamily,
+		});
 		previewTemplate.innerText = text.repeat(characterToFill + 1);
 
 		/* Using classlist maybe better but it simpler to write it like this
@@ -128,6 +132,5 @@ import Settings from "../components/Settings.astro";
 		previewWindow.style.backgroundColor = color;
 	}
 
-
-
+	function upload() {}
 </script>
