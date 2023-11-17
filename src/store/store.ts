@@ -11,3 +11,9 @@ export const pageState = map({
     lineHeight: 1.5,
     align: 'left',
 })
+
+export const buttonState = map({
+    preview: false,
+    save: false,
+    getCode: false,
+})

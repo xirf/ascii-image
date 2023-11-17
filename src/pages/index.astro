@@ -12,22 +12,22 @@ import Settings from "../components/Settings.astro";
 		<meta name="generator" content={Astro.generator} />
 		<title>ACI - Image behid text</title>
 	</head>
-	<body class="h-screen w-full flex">
-		<div class="w-full p-2 h-full relative">
+	<body class="h-screen w-full lg:overflow-hidden flex flex-col relative lg:flex-row">
+		<div class="w-full p-2 h-[90vh] duration-500 transition-all ease-in-out shrink-0 lg:shrink lg:h-screen">
 			<div class="h-full box-border relative flex flex-col bg-base-200 rounded-xl">
-				<div class="flex items-center gap-2 px-4">
-					<div class="flex items-center gap-2 p-4 opacity-50 grow">
-						{Array.from({ length: 3 }).map((_, i) => <div class="w-4 h-4 bg-base-content rounded-xl" />)}
+				<div class="items-center px-4 hidden lg:flex lg:gap-2 ">
+					<div class="flex items-center gap-2 p-4 opacity-50 grow cursor-pointer">
+						{["#FF5F56", "#FFBD2E", "#27C93F"].map((el) => <div class="w-4 h-4 rounded-xl" style={`background: ${el}`} />)}
 					</div>
 					<div class="w-96 max-w-sm p-2 box-border">
 						<div class="input h-10 border-1 border-neutral flex items-center justify-center">https://aci.andka.me/🍀</div>
 					</div>
 					<div class="grow"></div>
 				</div>
-				<div class="p-2 grow overflow-hidden">
+				<div class="lg:p-2 grow overflow-hidden">
 					<div class="preview h-full rounded-xl overflow-hidden">
 						<div id="preview-template" class="w-full h-full">
-							<div class="w-full h-full flex-col flex items-center justify-center relative bg-base-300">
+							<div class="w-full h-full flex-col flex items-center justify-center relative bg-base-300 p-8">
 								<div class="max-w-xl text-center grid gap-4">
 									<p class="text-9xl">🍀</p>
 									<h1 class="text-3xl font-bold">Let's start by messing around with panel</h1>
@@ -36,6 +36,9 @@ import Settings from "../components/Settings.astro";
 										you can find the <a href="https://github.com/xirf/ascii-image" target="_blank" class="text-success"
 											>source code here</a
 										>.
+									</p>
+									<p class="lg:hidden text-xs opacity-75 mt-16">
+										Scroll down to see the panel
 									</p>
 								</div>
 								<div class="absolute bottom-10 opacity-50 text-xs">
@@ -54,7 +57,7 @@ import Settings from "../components/Settings.astro";
 				</div>
 			</div>
 		</div>
-		<section class="w-full shrink-0 max-w-md h-full flex flex-col">
+		<section class="w-full shrink-0 lg:max-w-md h-screen flex flex-col bg-base-100 ">
 			<Header />
 			<Settings />
 		</section>
@@ -62,7 +65,7 @@ import Settings from "../components/Settings.astro";
 </html>
 
 <script>
-	import { pageState } from "../store/store";
+	import { pageState, buttonState } from "../store/store";
 
 	// Add some spice
 	window.history.replaceState({}, "", `/🍀`);
@@ -119,8 +122,12 @@ import Settings from "../components/Settings.astro";
     		color: transparent;
 			white-space: break-spaces;
     		word-break: break-all;
+			line-height: ${lineHeight};
 			`
 		);
 		previewWindow.style.backgroundColor = color;
 	}
+
+
+
 </script>

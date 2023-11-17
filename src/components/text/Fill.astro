@@ -56,6 +56,7 @@ let tales = fs
 
 	text.addEventListener('change', ()=>{
 		template.selectedIndex = 0;
+		text.value = text.value.replaceAll('\n', ' ');
 		pageState.setKey('text', text.value);
 	})
 </script>

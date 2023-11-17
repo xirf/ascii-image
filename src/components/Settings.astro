@@ -3,16 +3,34 @@ import Text from "./Text.astro";
 import UploadImage from "./UploadImage.astro";
 ---
 
-<div class="flex flex-col relative w-full h-full">
+<div class="flex flex-col relative w-full h-full overflow-auto">
 	<div class="grid">
 		<UploadImage />
 		<Text />
 	</div>
-	<div class="absolute bottom-0 left-0 w-full">
-		<div class="w-full grid grid-cols-3 lg:grid-cols-2 gap-4 p-4">
-			<button class="btn btn-success">💾 Save</button>
-			<button class="btn btn-info lg:hidden">🧐Preview</button>
-			<button class="btn btn-neutral">✨ Get Code</button>
+	<div class="w-full">
+		<div class="w-full grid grid-cols-2 gap-4 p-4">
+			<button id="saveButton" class="btn btn-success">💾 Save</button>
+			<button id="getCodeButton" class="btn btn-neutral">✨ Get Code</button>
 		</div>
 	</div>
 </div>
+
+<script>
+	import {buttonState} from "../store/store"
+
+	const saveButton = document.getElementById("saveButton")! as HTMLButtonElement;
+	const getCodeButton = document.getElementById("getCodeButton")! as HTMLButtonElement;
+
+	saveButton.addEventListener("click", () => {
+		buttonState.setKey("save", true);
+	});
+
+
+	getCodeButton.addEventListener("click", () => {
+		buttonState.setKey("getCode", true);
+	});
+
+
+
+</script>

@@ -15,12 +15,12 @@ import Section from "./Section.astro";
 				name="image"
 				id="image"
 				accept="image/jpeg,image/png,image/webp"
-				class="w-full h-full opacity-0 absolute top-0 left-0 cursor-pointer"
+				class="w-full h-full opacity-0 absolute top-0 left-0 cursor-pointer z-0"
 			/>
 			<label
 				for="image"
 				id="imageLabel"
-				class="w-full h-full border-success border-2 border-dashed rounded-lg flex items-center justify-center text-center text-base-content cursor-pointer">
+				class="w-full h-full border-success border-2 border-dashed rounded-lg flex items-center justify-center text-center text-base-content cursor-pointer z-10">
 				<span> Click or bring it here 👌</span>
 			</label>
 		</div>
@@ -32,7 +32,7 @@ import Section from "./Section.astro";
 			<input type="color" name="bg-color" id="bg-color" class="hidden" />
 			<label
 				for="bg-color"
-				class="cursor-pointer w-full h-full flex-col flex items-center justify-center text-base-content rounded-xl"
+				class="cursor-pointer w-full h-full flex-col flex items-center justify-center text-base-content rounded-xl text-center"
 				id="colorTarget">
 				<span>🎨</span>
 				<span>Get your color</span>
@@ -53,10 +53,10 @@ import Section from "./Section.astro";
 		colorInput.value = colorTarget.style.backgroundColor;
 	};
 
-	let pageStateContent = pageState.get();
 
 	colorInput.addEventListener("change", (e) => {
-		pageState.setKey('color', colorInput.value)
+		pageState.setKey('color', colorInput.value);
+		colorTarget.style.backgroundColor = colorInput.value;
 	});
 
 	imageInput.addEventListener("change", async () => {
@@ -74,5 +74,4 @@ import Section from "./Section.astro";
 		pageState.setKey('image', base64Image)
 	});
 
-	pageState.subscribe((state) => (pageStateContent = state));
 </script>

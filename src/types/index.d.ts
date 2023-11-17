@@ -6,7 +6,7 @@ declare global {
     }
 }
 
-declare PageState = {
+interface PageState {
     image: string,
     color: string,
     text: string,
