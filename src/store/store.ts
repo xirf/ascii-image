@@ -10,5 +10,4 @@ export const pageState = map({
     fontFamily: 'Arial',
     lineHeight: 1.5,
     align: 'left',
-    isFirst: true
 })
