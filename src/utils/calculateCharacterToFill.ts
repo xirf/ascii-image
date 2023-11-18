@@ -12,7 +12,7 @@ import type { CalculateCharacterOptions } from "../types";
  * @param family - The font family.
  * @returns The approximate number of characters needed to fill the view.
  */
-export function calculateCharacterToFill(options: CalculateCharacterOptions): number {
+export default function calculateCharacterToFill(options: CalculateCharacterOptions): number {
     const { text, fontSize, lineHeight, width, height, family } = options;
     
     // Create a canvas and get its context.

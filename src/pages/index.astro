@@ -61,21 +61,29 @@ import { Icon } from "astro-icon";
 			<Settings />
 		</section>
 
-		<dialog id="loadingModal" class="modal modal-open modal-bottom sm:modal-middle">
+		<dialog id="modal" class="modal modal-bottom sm:modal-middle">
 			<div class="modal-box text-center">
-				<!-- <h3 class="font-bold text-xl">Please Wait 😇</h3>
-				<p class="py-4 max-w-md">
-					We are uploading your image to our server, this may take a while depending on your internet connection. Please be patient.
-				</p>
-				<span class="loading loading-dots loading-lg"></span> -->
-				<h3 class="font-bold text-xl">Upload Complete 🥳</h3>
-				<p class="py-4 max-w-md">Here is your url, click to copy and share it with others.</p>
-				<div class="join ">
-					<input class="input input-bordered join-item select-all" value="https://index" />
-					<button class="btn join-item col-span-2">
-						<Icon name="lucide:copy" size="16" />
-						<span>Copy</span>
-					</button>
+				<div class="success hidden" id="loadingModal">
+					<h3 class="font-bold text-xl">Please Wait 😇</h3>
+					<p class="py-4 max-w-md">
+						We are uploading your image to our server, this may take a while depending on your internet connection. Please be patient.
+					</p>
+					<span class="loading loading-dots loading-lg"></span>
+				</div>
+				<div class="success hidden" id="successModal">
+					<h3 class="font-bold text-xl">Upload Complete 🥳</h3>
+					<p class="py-4 max-w-md">Here is your url, click to copy and share it with others.</p>
+					<div class="join">
+						<input class="input input-bordered join-item select-all" value="https://index" id="successLink" />
+						<button class="btn join-item col-span-2" id="copyButton">
+							<Icon name="lucide:copy" size="16" />
+							<span>Copy</span>
+						</button>
+					</div>
+					<div class="grid grid-cols-2 gap-4 mt-8">
+						<button class="btn btn-neutral"> 👀 History</button>
+						<button class="btn btn-success" id="closeButton"> ✨ Kembali</button>
+					</div>
 				</div>
 			</div>
 		</dialog>
@@ -84,10 +92,16 @@ import { Icon } from "astro-icon";
 
 <script>
 	import { pageState, buttonState } from "../store/store";
-	import { calculateCharacterToFill } from "../utils/calculateCharacterToFill";
+	import calculateCharacterToFill from "../utils/calculateCharacterToFill";
 
 	const previewWindow = document.querySelector(".preview")! as HTMLElement;
 	const previewTemplate = document.querySelector("#preview-template")! as HTMLElement;
+	const modal = document.querySelector("#modal")! as HTMLDialogElement;
+	const loadingModal = document.querySelector("#loadingModal")! as HTMLElement;
+	const successModal = document.querySelector("#successModal")! as HTMLElement;
+	const successLink = document.querySelector("#successLink")! as HTMLInputElement;
+	const copyButton = document.querySelector("#copyButton")! as HTMLButtonElement;
+	const closeButton = document.querySelector("#closeButton")! as HTMLButtonElement;
 
 	// Add some spice
 	window.history.replaceState({}, "", `/🍀`);
@@ -132,5 +146,79 @@ import { Icon } from "astro-icon";
 		previewWindow.style.backgroundColor = color;
 	}
 
-	function upload() {}
+	async function upload() {
+		let imageBB = "https://api.imgbb.com/1/upload?expiration=15552000&key=74fa7bfc7bc9c140a0f5cd912b677412";
+		modal.classList.add("modal-open");
+		loadingModal.classList.remove("hidden");
+		successModal.classList.add("hidden");
+		const { image, color, text, fontSize, fontFamily, lineHeight, align } = pageState.get();
+		let blob = dataURItoBlob(image);
+
+		const formData = new FormData();
+		formData.append("image", blob, "image.png");
+
+		const response = await fetch(imageBB, {
+			method: "POST",
+			body: formData,
+		});
+
+		if (response.status < 200 || response.status > 299) {
+			alert("Something went wrong, please try again later");
+			return;
+		}
+
+		const { data } = await response.json();
+		const url = data.thumb.url;
+
+		successLink.value = url;
+
+
+		
+
+
+		modal.classList.remove("modal-open");
+		modal.classList.add("modal-open");
+		loadingModal.classList.add("hidden");
+		successModal.classList.remove("hidden");
+	}
+
+	function dataURItoBlob(dataURI: string) {
+		// convert base64 to raw binary data held in a string
+		// doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+		var byteString = atob(dataURI.split(",")[1]);
+
+		// separate out the mime component
+		var mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+
+		// write the bytes of the string to an ArrayBuffer
+		var ab = new ArrayBuffer(byteString.length);
+
+		// create a view into the buffer
+		var ia = new Uint8Array(ab);
+
+		// set the bytes of the buffer to the correct values
+		for (var i = 0; i < byteString.length; i++) {
+			ia[i] = byteString.charCodeAt(i);
+		}
+
+		// write the ArrayBuffer to a blob, and you're done
+		var blob = new Blob([ab], { type: mimeString });
+		return blob;
+	}
+
+	async function copy() {
+		await navigator.clipboard.writeText(successLink.value);
+		copyButton.innerText = "Copied!";
+		setTimeout(() => {
+			copyButton.innerText = "Copy";
+		}, 1000);
+	}
+
+	pageState.listen((state, change) => {
+		if (change == "image") upload();
+	});
+
+	closeButton.addEventListener("click", () => {
+		modal.classList.remove("modal-open");
+	});
 </script>
