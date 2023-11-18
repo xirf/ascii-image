@@ -1,4 +1,5 @@
 ---
+import supabase from "../database/client";
 const url = Astro.request.url;
 let special = "%F0%9F%8D%80";
 
@@ -7,4 +8,57 @@ if (url.includes(special)) {
 }
 ---
 
-<div>{url}</div>
+<div class="preview h-screen overflow-hidden bg-white">
+	<div id="preview-template" class="w-full h-full"></div>
+</div>
+
+<script>
+	import { createClient } from "@supabase/supabase-js";
+	import calculateCharacterToFill from "../utils/calculateCharacterToFill";
+
+	const previewTemplate = document.getElementById("preview-template")! as HTMLDivElement;
+	const preview = document.querySelector(".preview")! as HTMLDivElement;
+	const previewWindow = document.querySelector(".preview")! as HTMLElement;
+
+
+	const supabase = createClient(import.meta.env.PUBLIC_SUPA_URL, import.meta.env.PUBLIC_KEY);
+
+	const { data, error } = await supabase.from("project").select("image, color, text, fontsize, fontfamily, lineheight, align").eq("url", window.location.pathname.replace("/", ""));
+
+	if (error) {
+		window.location.href = "/ouch";
+	}
+
+	if (data) {
+		const { image, color, text, fontsize, fontfamily, lineheight, align } = data[0];
+		let characterToFill = calculateCharacterToFill({
+			text,
+			fontSize: fontsize,
+			lineHeight: lineheight,
+			width: preview.offsetWidth,
+			height: preview.offsetHeight,
+			family: fontfamily,
+		});
+
+		previewTemplate.innerText = text.repeat(characterToFill + 1);
+
+		previewTemplate.setAttribute(
+			"style",
+			`
+			width: 100%;
+			height: 100%;
+			font-size: ${fontsize}px;
+			font-family: ${fontfamily};
+			text-align: ${align};
+    		overflow: hidden;
+    		background: transparent url(${image}) center / cover no-repeat text;
+    		color: transparent;
+			white-space: break-spaces;
+    		word-break: break-all;
+			line-height: ${lineheight};
+			`
+		);
+
+		previewWindow.style.backgroundColor = color;
+	}
+</script>

@@ -154,28 +154,31 @@ import { Icon } from "astro-icon";
 		const { image, color, text, fontSize, fontFamily, lineHeight, align } = pageState.get();
 		let blob = dataURItoBlob(image);
 
-		// const formData = new FormData();
-		// formData.append("image", blob, "image.png");
+		const formData = new FormData();
+		formData.append("image", blob, "image.png");
 
-		// const response = await fetch(imageBB, {
-		// 	method: "POST",
-		// 	body: formData,
-		// });
+		const response = await fetch(imageBB, {
+			method: "POST",
+			body: formData,
+		});
 
-		// if (response.status < 200 || response.status > 299) {
-		// 	alert("Something went wrong, please try again later");
-		// 	return;
-		// }
+		if (response.status < 200 || response.status > 299) {
+			alert("Something went wrong, please try again later");
+			return;
+		}
 
-		// const { data } = await response.json();
-		const url = "data.thumb.url";
+		const { data } = await response.json();
+		const imageUrl = data.thumb.url;
 
 		successLink.value = "";
+
+		let uid = localStorage.getItem("uid") || crypto.randomUUID();
 
 		let res = await fetch("/api/upload", {
 			method: "POST",
 			body: JSON.stringify({
-				image: url,
+				image: imageUrl,
+				uid: uid,
 				color: color,
 				text: text,
 				fontSize: fontSize,
@@ -187,6 +190,16 @@ import { Icon } from "astro-icon";
 				"Content-Type": "application/json",
 			},
 		});
+
+		if (res.status < 200 || res.status > 299) {
+			alert("Something went wrong, please try again later");
+			return;
+		}
+
+		let { url: finalUrl } = (await res.json())[0];
+
+		localStorage.setItem("uid", uid);
+		successLink.value = window.location.origin + "/" + finalUrl;
 
 		modal.classList.remove("modal-open");
 		modal.classList.add("modal-open");
@@ -220,17 +233,19 @@ import { Icon } from "astro-icon";
 
 	async function copy() {
 		await navigator.clipboard.writeText(successLink.value);
-		copyButton.innerText = "Copied!";
+		copyButton.querySelector("span")!.innerText = "Copied!";
 		setTimeout(() => {
-			copyButton.innerText = "Copy";
+			copyButton.querySelector("span")!.innerText = "Copy";
 		}, 1000);
 	}
 
-	pageState.listen((state, change) => {
-		if (change == "image") upload();
+	buttonState.listen((state, change) => {
+		if (change == "save") upload();
 	});
 
 	closeButton.addEventListener("click", () => {
 		modal.classList.remove("modal-open");
 	});
+
+	copyButton.addEventListener("click", copy);
 </script>

@@ -2,12 +2,12 @@ import type { APIRoute } from "astro";
 import supabase from "../../database/client";
 
 export const POST: APIRoute = (async ({ request }) => {
-    let { image, color, text, fontSize, fontFamily, lineHeight, align, } = await request.json();
+    let { uid, image, color, text, fontSize, fontFamily, lineHeight, align, } = await request.json();
 
     let { data, error } = await supabase
         .from('project')
         .insert([ {
-            uid: "request.headers.get('uid')",
+            uid,
             image,
             color,
             text,
@@ -15,7 +15,9 @@ export const POST: APIRoute = (async ({ request }) => {
             fontfamily: fontFamily,
             lineheight: lineHeight,
             align,
+            url: crypto.randomUUID().split('-')[ Math.floor(Math.random() * 5) ]
         } ])
+        .select();
 
 
     if (error) {

@@ -13,7 +13,6 @@ export const pageState = map({
 })
 
 export const buttonState = map({
-    preview: false,
     save: false,
     getCode: false,
 })
