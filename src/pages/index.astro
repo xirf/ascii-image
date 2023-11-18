@@ -154,27 +154,39 @@ import { Icon } from "astro-icon";
 		const { image, color, text, fontSize, fontFamily, lineHeight, align } = pageState.get();
 		let blob = dataURItoBlob(image);
 
-		const formData = new FormData();
-		formData.append("image", blob, "image.png");
+		// const formData = new FormData();
+		// formData.append("image", blob, "image.png");
 
-		const response = await fetch(imageBB, {
+		// const response = await fetch(imageBB, {
+		// 	method: "POST",
+		// 	body: formData,
+		// });
+
+		// if (response.status < 200 || response.status > 299) {
+		// 	alert("Something went wrong, please try again later");
+		// 	return;
+		// }
+
+		// const { data } = await response.json();
+		const url = "data.thumb.url";
+
+		successLink.value = "";
+
+		let res = await fetch("/api/upload", {
 			method: "POST",
-			body: formData,
+			body: JSON.stringify({
+				image: url,
+				color: color,
+				text: text,
+				fontSize: fontSize,
+				fontFamily: fontFamily,
+				lineHeight: lineHeight,
+				align: align,
+			}),
+			headers: {
+				"Content-Type": "application/json",
+			},
 		});
-
-		if (response.status < 200 || response.status > 299) {
-			alert("Something went wrong, please try again later");
-			return;
-		}
-
-		const { data } = await response.json();
-		const url = data.thumb.url;
-
-		successLink.value = url;
-
-
-		
-
 
 		modal.classList.remove("modal-open");
 		modal.classList.add("modal-open");
