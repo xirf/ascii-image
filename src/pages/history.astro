@@ -1,9 +1,35 @@
 ---
-import Layout from "../layouts/Default.astro"
+import Layout from "../layouts/Default.astro";
 import Header from "../components/Header.astro";
-
+import { Icon } from "astro-icon";
 ---
 
 <Layout class:list={""}>
-	<Header />
+	<div class="sticky pt-1">
+		<Header />
+	</div>
+	<div class="w-full h-full p-8 grid grid-cols-3 gap-8 max-w-6xl m-auto">
+		{
+			Array.from({ length: 5 }).map((el) => (
+				<div class="card bg-base-200 shadow-xl">
+					<figure class="h-32">
+						<img src="/mem.jpg" alt="Shoes" />
+					</figure>
+					<div class="card-body">
+						<p>If a dog chews shoes whose shoes does he choose?</p>
+						<div class="card-actions grid grid-cols-2 mt-4">
+							<button class="btn btn-sm btn-error btn-outline ">🗑️ Delete</button>
+							<button class="btn btn-sm btn-success ">👀 View</button>
+						</div>
+					</div>
+				</div>
+			))
+		}
+
+		<a
+			href="/"
+			class="card shadow-xl border-dashed border-4 border-base-content flex items-center justify-center opacity-50 hover:opacity-75 transition-all duration-500">
+			<Icon name="fluent:add-12-filled" class="w-20 h-20 text-base-content p-4 rounded-full border-4" />
+		</a>
+	</div>
 </Layout>
