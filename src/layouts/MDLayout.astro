@@ -1,0 +1,52 @@
+---
+import type { MarkdownLayoutProps } from "astro";
+import Header from "../components/header.astro";
+
+type Props = MarkdownLayoutProps<{
+	title: string;
+}>;
+
+const { frontmatter, url } = Astro.props;
+---
+
+<html>
+	<head>
+		<title>ACII - {frontmatter.title}</title>
+	</head>
+	<body class="m-0 p-0">
+		<div class="sticky top-0 left-0 w-full p-1">
+			<Header />
+		</div>
+		<div class="max-w-4xl m-auto bg-base-200 p-8 min-h-screen rounded-2xl">
+			<h1 class="text-3xl font-bold">
+				{frontmatter.title}
+			</h1>
+			<div class="divider divider-info"></div>
+			<main class="flex flex-col gap-4" id="md">
+				<slot />
+			</main>
+		</div>
+	</body>
+</html>
+
+<style is:global>
+	#md a {
+		color: hsl(var(--su)) !important;
+	}
+
+	#md h1 {
+		font-size: 24px;
+		font-weight: 600;
+	}
+
+	#md ul,
+	#md ol {
+		list-style: disc;
+		padding-left: 1rem;
+		margin-left: 2rem;
+	}
+
+	#md ol {
+		list-style: lower-alpha;
+	}
+</style>

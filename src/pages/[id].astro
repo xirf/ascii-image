@@ -13,23 +13,38 @@ if (url.includes(special)) {
 </div>
 
 <script>
-	import { createClient } from "@supabase/supabase-js";
 	import calculateCharacterToFill from "../utils/calculateCharacterToFill";
 
 	const previewTemplate = document.getElementById("preview-template")! as HTMLDivElement;
 	const preview = document.querySelector(".preview")! as HTMLDivElement;
 	const previewWindow = document.querySelector(".preview")! as HTMLElement;
 
-
-	const supabase = createClient(import.meta.env.PUBLIC_SUPA_URL, import.meta.env.PUBLIC_KEY);
-
-	const { data, error } = await supabase.from("project").select("image, color, text, fontsize, fontfamily, lineheight, align").eq("url", window.location.pathname.replace("/", ""));
-
-	if (error) {
-		window.location.href = "/ouch";
+	interface RenderedData {
+		image: string;
+		color: string;
+		text: string;
+		fontsize: number;
+		fontfamily: string;
+		lineheight: number;
+		align: string;
 	}
 
-	if (data) {
+	let url = window.location.pathname.replace("/", "");
+	const res = await fetch(`/api/getDetail?url=${url}`);
+
+	if (res.status !== 200) {
+		window.location.replace("/ouch");
+	}
+
+	const { data } = await res.json();
+
+	if (data) render(data);
+
+	window.addEventListener("resize", () => {
+		if (data) render(data);
+	});
+
+	function render(data: RenderedData[]) {
 		const { image, color, text, fontsize, fontfamily, lineheight, align } = data[0];
 		let characterToFill = calculateCharacterToFill({
 			text,

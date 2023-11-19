@@ -1,94 +1,85 @@
 ---
-import Block from "../components/Block.astro";
+import Layout from "../layouts/Default.astro";
 import Header from "../components/Header.astro";
 import Settings from "../components/Settings.astro";
 import { Icon } from "astro-icon";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/clover.png" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>ACI - Image behid text</title>
-	</head>
-	<body class="h-screen w-full lg:overflow-hidden flex flex-col relative lg:flex-row">
-		<div class="w-full p-2 h-[90vh] duration-500 transition-all ease-in-out shrink-0 lg:shrink lg:h-screen">
-			<div class="h-full box-border relative flex flex-col bg-base-200 rounded-xl">
-				<div class="items-center px-4 hidden lg:flex lg:gap-2">
-					<div class="flex items-center gap-2 p-4 opacity-50 grow cursor-pointer">
-						{["#FF5F56", "#FFBD2E", "#27C93F"].map((el) => <div class="w-4 h-4 rounded-xl" style={`background: ${el}`} />)}
-					</div>
-					<div class="w-96 max-w-sm p-2 box-border">
-						<div class="input h-10 border-1 border-neutral flex items-center justify-center">https://aci.andka.me/🍀</div>
-					</div>
-					<div class="grow"></div>
+<Layout className={"h-screen w-full lg:overflow-hidden flex flex-col relative lg:flex-row"}>
+	<div class="w-full p-2 h-[90vh] duration-500 transition-all ease-in-out shrink-0 lg:shrink lg:h-screen">
+		<div class="h-full box-border relative flex flex-col bg-base-200 rounded-xl">
+			<div class="items-center px-4 hidden lg:flex lg:gap-2">
+				<div class="flex items-center gap-2 p-4 opacity-50 grow cursor-pointer">
+					{["#FF5F56", "#FFBD2E", "#27C93F"].map((el) => <div class="w-4 h-4 rounded-xl" style={`background: ${el}`} />)}
 				</div>
-				<div class="lg:p-2 grow overflow-hidden">
-					<div class="preview h-full rounded-xl overflow-hidden">
-						<div id="preview-template" class="w-full h-full">
-							<div class="w-full h-full flex-col flex items-center justify-center relative bg-base-300 p-8">
-								<div class="max-w-xl text-center grid gap-4">
-									<p class="text-9xl">🍀</p>
-									<h1 class="text-3xl font-bold">Let's start by messing around with panel</h1>
-									<p>
-										this just a tool to help you create images with text behind them. this project is completely open source and
-										you can find the <a href="https://github.com/xirf/ascii-image" target="_blank" class="text-success"
-											>source code here</a
-										>.
-									</p>
-									<p class="lg:hidden text-xs opacity-75 mt-16">Scroll down to see the panel</p>
-								</div>
-								<div class="absolute bottom-10 opacity-50 text-xs">
-									Made by <a href="https://github.com/xirf" target="_blank" class="text-success" rel="noopener noreferrer">xirf</a>
-									 with
-									<a href="https://astro.build" target="_blank" rel="noopener noreferrer" class="text-warning">Astro</a> and <a
-										href="http://daisyui.com"
-										class="text-success"
-										target="_blank"
-										rel="noopener noreferrer">DaisyUI</a
-									>
-								</div>
+				<div class="w-96 max-w-sm p-2 box-border">
+					<div class="input h-10 border-1 border-neutral flex items-center justify-center">https://aci.andka.me/🍀</div>
+				</div>
+				<div class="grow"></div>
+			</div>
+			<div class="lg:p-2 grow overflow-hidden">
+				<div class="preview h-full rounded-xl overflow-hidden">
+					<div id="preview-template" class="w-full h-full">
+						<div class="w-full h-full flex-col flex items-center justify-center relative bg-base-300 p-8">
+							<div class="max-w-xl text-center grid gap-4">
+								<p class="text-9xl">🍀</p>
+								<h1 class="text-3xl font-bold">Let's start by messing around with panel</h1>
+								<p>
+									this just a tool to help you create images with text behind them. this project is completely open source and you
+									can find the <a href="https://github.com/xirf/ascii-image" target="_blank" class="text-success"
+										>source code here</a
+									>.
+								</p>
+								<p class="lg:hidden text-xs opacity-75 mt-16">Scroll down to see the panel</p>
+							</div>
+							<div class="absolute bottom-10 opacity-50 text-xs">
+								Made by <a href="https://github.com/xirf" target="_blank" class="text-success" rel="noopener noreferrer">xirf</a>
+								 with
+								<a href="https://astro.build" target="_blank" rel="noopener noreferrer" class="text-warning">Astro</a> and <a
+									href="http://daisyui.com"
+									class="text-success"
+									target="_blank"
+									rel="noopener noreferrer">DaisyUI</a
+								>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<section class="w-full shrink-0 lg:max-w-md h-screen flex flex-col bg-base-100">
-			<Header />
-			<Settings />
-		</section>
+	</div>
+	<section class="w-full shrink-0 lg:max-w-md h-screen flex flex-col bg-base-100">
+		<Header />
+		<Settings />
+	</section>
 
-		<dialog id="modal" class="modal modal-bottom sm:modal-middle">
-			<div class="modal-box text-center">
-				<div class="success hidden" id="loadingModal">
-					<h3 class="font-bold text-xl">Please Wait 😇</h3>
-					<p class="py-4 max-w-md">
-						We are uploading your image to our server, this may take a while depending on your internet connection. Please be patient.
-					</p>
-					<span class="loading loading-dots loading-lg"></span>
+	<dialog id="modal" class="modal modal-bottom sm:modal-middle">
+		<div class="modal-box text-center">
+			<div class="success hidden" id="loadingModal">
+				<h3 class="font-bold text-xl">Please Wait 😇</h3>
+				<p class="py-4 max-w-md">
+					We are uploading your image to our server, this may take a while depending on your internet connection. Please be patient.
+				</p>
+				<span class="loading loading-dots loading-lg"></span>
+			</div>
+			<div class="success hidden" id="successModal">
+				<h3 class="font-bold text-xl">Upload Complete 🥳</h3>
+				<p class="py-4 max-w-md">Here is your url, click to copy and share it with others.</p>
+				<div class="join">
+					<input class="input input-bordered join-item select-all" value="https://index" id="successLink" />
+					<button class="btn join-item col-span-2" id="copyButton">
+						<Icon name="lucide:copy" size="16" />
+						<span>Copy</span>
+					</button>
 				</div>
-				<div class="success hidden" id="successModal">
-					<h3 class="font-bold text-xl">Upload Complete 🥳</h3>
-					<p class="py-4 max-w-md">Here is your url, click to copy and share it with others.</p>
-					<div class="join">
-						<input class="input input-bordered join-item select-all" value="https://index" id="successLink" />
-						<button class="btn join-item col-span-2" id="copyButton">
-							<Icon name="lucide:copy" size="16" />
-							<span>Copy</span>
-						</button>
-					</div>
-					<div class="grid grid-cols-2 gap-4 mt-8">
-						<button class="btn btn-neutral"> 👀 History</button>
-						<button class="btn btn-success" id="closeButton"> ✨ Kembali</button>
-					</div>
+				<div class="grid grid-cols-2 gap-4 mt-8">
+					<button class="btn btn-neutral"> 👀 History</button>
+					<button class="btn btn-success" id="closeButton"> ✨ Kembali</button>
 				</div>
 			</div>
-		</dialog>
-	</body>
-</html>
+		</div>
+	</dialog>
+</Layout>
 
 <script>
 	import { pageState, buttonState } from "../store/store";

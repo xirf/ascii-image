@@ -1,8 +1,49 @@
 ---
-
+const sadKaomoji = [
+	"(╥_╥)",
+	"(T_T)",
+	"(;﹏;)",
+	"(ToT)",
+	"(｡•́︿•̀｡)",
+	"(ಥ﹏ಥ)",
+	"(｡T ω T｡)",
+	"(╯︵╰,)",
+	"(/ω＼)",
+	"(´；д；`)",
+	"｡ﾟ(ﾟ´(00)`ﾟ)ﾟ｡",
+	"(¬_¬)",
+	"(╯°□°）╯︵ ┻━┻",
+	"(¬‿¬)",
+	"(⊙_☉)",
+	"(ಠ_ಠ)",
+	"щ(ಠ益ಠщ)",
+	"(ノಠ益ಠ)ノ彡┻━┻",
+	"(¬з¬)",
+	"(⇀‸↼‶)",
+	"(─‿‿─)",
+	"(>_<)",
+	"(︶︹︺)",
+	"(￣ヘ￣)",
+];
 ---
 
-<div>
-    <h1>404</h1>
-    <p>Page not found</p>
-</div>
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>ASCII - Not Found</title>
+	</head>
+	<body>
+		<div class="w-full h-screen flex items-center justify-center text-center gap-8 flex-col p-8">
+			<h1 class="text-8xl font-bold">
+				{sadKaomoji[Math.floor(Math.random() * sadKaomoji.length)]}
+			</h1>
+			<p class="text-xl max-w-2xl">
+				The page you're looking for is on a coffee break. It'll be back when it feels like it. Meanwhile, try not to disturb its relaxation
+				with too many refreshes. It's a bit grumpy when rushed!
+			</p>
+			<a href="/" class="btn btn-sm btn-success btn-outline">Go back home</a>
+		</div>
+	</body>
+</html>
