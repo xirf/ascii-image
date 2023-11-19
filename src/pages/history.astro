@@ -2,24 +2,52 @@
 import Layout from "../layouts/Default.astro";
 import Header from "../components/Header.astro";
 import { Icon } from "astro-icon";
+
+const sadKaomoji = [
+	"(╥_╥)",
+	"(T_T)",
+	"(;﹏;)",
+	"(ToT)",
+	"(｡•́︿•̀｡)",
+	"(ಥ﹏ಥ)",
+	"(｡T ω T｡)",
+	"(╯︵╰,)",
+	"(/ω＼)",
+	"(´；д；`)",
+	"｡ﾟ(ﾟ´(00)`ﾟ)ﾟ｡",
+	"(¬_¬)",
+	"(╯°□°）╯︵ ┻━┻",
+	"(¬‿¬)",
+	"(⊙_☉)",
+	"(ಠ_ಠ)",
+	"щ(ಠ益ಠщ)",
+	"(ノಠ益ಠ)ノ彡┻━┻",
+	"(¬з¬)",
+	"(⇀‸↼‶)",
+	"(─‿‿─)",
+	"(>_<)",
+	"(︶︹︺)",
+	"(￣ヘ￣)",
+];
 ---
 
 <Layout class:list={""}>
 	<div class="sticky pt-1">
 		<Header />
 	</div>
-	<div class="w-full h-full p-8 grid grid-cols-3 gap-8 max-w-6xl m-auto">
+	<div class="w-full h-full p-8 grid grid-cols-3 gap-8 max-w-6xl m-auto" id="target">
 		{
 			Array.from({ length: 5 }).map((el) => (
-				<div class="card bg-base-200 shadow-xl">
-					<figure class="h-32">
-						<img src="/mem.jpg" alt="Shoes" />
-					</figure>
+				<div class="card bg-base-200 shadow-xl h-72 delete-target">
+					<figure class="skeleton w-full h-full" />
 					<div class="card-body">
-						<p>If a dog chews shoes whose shoes does he choose?</p>
+						<div class="grid gap-2">
+							<p class="skeleton h-4 w-full" />
+							<p class="skeleton h-4 w-16" />
+						</div>
 						<div class="card-actions grid grid-cols-2 mt-4">
-							<button class="btn btn-sm btn-error btn-outline ">🗑️ Delete</button>
-							<button class="btn btn-sm btn-success ">👀 View</button>
+							<div class="skeleton w-full h-8" />
+							<div class="skeleton w-full h-8" />
 						</div>
 					</div>
 				</div>
@@ -32,4 +60,85 @@ import { Icon } from "astro-icon";
 			<Icon name="fluent:add-12-filled" class="w-20 h-20 text-base-content p-4 rounded-full border-4" />
 		</a>
 	</div>
+	<template id="card">
+		<div class="card bg-base-200 shadow-xl h-72">
+			<figure class="w-full object-contain">
+				<img src="/mem.jpg" alt="Shoes" class="w-full" />
+			</figure>
+			<div class="card-body">
+				<p>If a dog chews shoes whose shoes does he choose?</p>
+				<div class="card-actions grid grid-cols-2 mt-4">
+					<button class="btn btn-sm btn-error btn-outline">🗑️ Delete</button>
+					<button class="btn btn-sm btn-success">👀 View</button>
+				</div>
+			</div>
+		</div>
+	</template>
+	<template id="notFound">
+		<div class="w-full h-screen flex items-center justify-center text-center gap-8 flex-col p-8">
+			<h1 class="text-8xl font-bold">
+				{sadKaomoji[Math.floor(Math.random() * sadKaomoji.length)]}
+			</h1>
+			<p class="text-xl max-w-2xl">
+				Did i got amnesia? I can't seem to find any of your memories. Help me memorize you by adding some memories.
+			</p>
+			<a href="/" class="btn btn-sm btn-success btn-outline">✨ Add Memory</a>
+		</div>
+	</template>
 </Layout>
+
+<script>
+	const target = document.getElementById("target")! as HTMLDivElement;
+	const deleteTarget = document.querySelectorAll(".delete-target")! as NodeListOf<HTMLDivElement>;
+	const cardTemplate = document.getElementById("card")! as HTMLTemplateElement;
+	const notFoundTemplate = document.getElementById("notFound")! as HTMLTemplateElement;
+
+	window.onload = async () => {
+		const uid = localStorage.getItem("uid");
+
+		function notFound() {
+			target.classList.remove("grid");
+			target.innerHTML = notFoundTemplate.innerHTML;
+			return;
+		}
+
+		if (!uid) {
+			notFound();
+			return;
+		}
+
+		const res = await fetch(`/api/getPost?uid=${uid}`);
+		const { data } = await res.json();
+		if (res.status !== 200 || !data || data.length === 0) {
+			notFound();
+			return;
+		}
+
+		deleteTarget.forEach((el) => {
+			el.remove();
+		});
+
+		data.forEach((el: any) => {
+			const clone = cardTemplate.content.cloneNode(true) as HTMLDivElement;
+			const figure = clone.querySelector("figure")! as HTMLDivElement;
+			const img = figure.querySelector("img")! as HTMLImageElement;
+			const cardBody = clone.querySelector(".card-body")! as HTMLDivElement;
+			const p = cardBody.querySelector("p")! as HTMLParagraphElement;
+			const btns = cardBody.querySelectorAll("button")! as NodeListOf<HTMLButtonElement>;
+
+			img.src = el.image;
+			p.innerText = el.text.substring(0, 50) + "...";
+			btns[0].addEventListener("click", async () => {
+				const res = await fetch(`/api/deletePost?id=${el.id}`);
+				if (res.status === 200) {
+					target.removeChild(clone);
+				}
+			});
+			btns[1].addEventListener("click", () => {
+				window.location.href = `/${el.url}`;
+			});
+
+			target.insertBefore(clone, target.lastElementChild);
+		});
+	};
+</script>
