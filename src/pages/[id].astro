@@ -21,7 +21,7 @@ const { image, color, text, fontsize, fontfamily, lineheight, align } = data[0];
 	<div class="preview h-screen overflow-hidden" style={`background-color: ${color}`}>
 		<div
 			id="preview-template"
-			class="w-full h-full"
+			class="w-full h-screen"
 			style={`
 			font-size: ${fontsize}px;
 			font-family: ${fontfamily};
@@ -46,11 +46,11 @@ const { image, color, text, fontsize, fontfamily, lineheight, align } = data[0];
 	const repeat = calculateCharacterToFill({
 		text: previewTemplate.innerText,
 		fontSize: parseInt(previewTemplate.style.fontSize.replace("px", "")),
-		lineHeight: parseInt(previewTemplate.style.lineHeight.replace("px", "")),
+		lineHeight: parseFloat(previewTemplate.style.lineHeight.replace("px", "")),
 		width: previewTemplate.clientWidth,
 		height: previewTemplate.clientHeight,
 		family: previewTemplate.style.fontFamily,
 	});
 
-	previewTemplate.innerText = previewTemplate.innerText.repeat(repeat + 1);
+	previewTemplate.innerText = (previewTemplate.innerText).repeat(repeat + 1);
 </script>

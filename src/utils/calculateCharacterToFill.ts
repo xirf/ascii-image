@@ -14,7 +14,7 @@ import type { CalculateCharacterOptions } from "../types";
  */
 export default function calculateCharacterToFill(options: CalculateCharacterOptions): number {
     const { text, fontSize, lineHeight, width, height, family } = options;
-    
+
     // Create a canvas and get its context.
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d")!;
@@ -35,8 +35,8 @@ export default function calculateCharacterToFill(options: CalculateCharacterOpti
     // Calculate the area of the view.
     const viewArea = width * height;
 
-    // Calculate the number of characters needed to fill the view.
-    const characters = Math.floor(viewArea / textArea);
+    // Make sure it not infinite
+    const characters = Math.ceil(viewArea / textArea) || 1; 
 
     return characters;
 }

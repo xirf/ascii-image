@@ -35,7 +35,7 @@ const sadKaomoji = [
 	<div class="sticky pt-1">
 		<Header />
 	</div>
-	<div class="w-full h-full p-8 grid grid-cols-3 gap-8 max-w-6xl m-auto" id="target">
+	<div class="w-full h-full p-8 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 max-w-6xl m-auto" id="target">
 		{
 			Array.from({ length: 5 }).map((el) => (
 				<div class="card bg-base-200 shadow-xl h-72 delete-target">
@@ -123,7 +123,7 @@ const sadKaomoji = [
 			// Clone the template
 			const clone = cardTemplate.content.cloneNode(true) as HTMLDivElement;
 			// Set the id for deletion purposes
-			(clone.querySelector('div') as HTMLDivElement).id = "id" + i;
+			(clone.querySelector("div") as HTMLDivElement).id = "id" + i;
 
 			// Get the elements
 			const figure = clone.querySelector("figure")! as HTMLDivElement;
@@ -133,7 +133,6 @@ const sadKaomoji = [
 
 			// Get the buttons
 			const btns = cardBody.querySelectorAll("button")! as NodeListOf<HTMLButtonElement>;
-
 
 			img.src = el.image;
 			p.innerText = el.text.substring(0, 50) + "...";
@@ -151,7 +150,7 @@ const sadKaomoji = [
 					alert("Something went wrong, please try again later.");
 				}
 			});
-			
+
 			btns[1].addEventListener("click", () => {
 				window.location.href = `/${el.url}`;
 			});
