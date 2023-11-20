@@ -1,78 +1,56 @@
 ---
-const url = Astro.request.url;
+import supabase from "../database/client";
+import Layout from "../layouts/Default.astro";
+const pathName = new URL(Astro.request.url).pathname.replace("/", "");
 let special = "%F0%9F%8D%80";
 
-if (url.includes(special)) {
+if (pathName === special) {
 	return Astro.redirect("/", 307);
 }
+
+const { data, error } = await supabase.from("project").select("image, color, text, fontsize, fontfamily, lineheight, align").eq("url", pathName);
+
+if (error || data?.length === 0) {
+	return Astro.redirect("/ouch", 307);
+}
+
+const { image, color, text, fontsize, fontfamily, lineheight, align } = data[0];
 ---
 
-<div class="preview h-screen overflow-hidden bg-white">
-	<div id="preview-template" class="w-full h-full"></div>
-</div>
+<Layout>
+	<div class="preview h-screen overflow-hidden" style={`background-color: ${color}`}>
+		<div
+			id="preview-template"
+			class="w-full h-full"
+			style={`
+			font-size: ${fontsize}px;
+			font-family: ${fontfamily};
+			text-align: ${align};
+			overflow: hidden;
+			background: transparent url(${image}) center / cover no-repeat text;
+			color: transparent;
+			white-space: break-spaces;
+			word-break: break-all;
+			line-height: ${lineheight};
+		`}>
+			{text}
+		</div>
+	</div>
+</Layout>
 
 <script>
 	import calculateCharacterToFill from "../utils/calculateCharacterToFill";
 
 	const previewTemplate = document.getElementById("preview-template")! as HTMLDivElement;
-	const preview = document.querySelector(".preview")! as HTMLDivElement;
-	const previewWindow = document.querySelector(".preview")! as HTMLElement;
 
-	interface RenderedData {
-		image: string;
-		color: string;
-		text: string;
-		fontsize: number;
-		fontfamily: string;
-		lineheight: number;
-		align: string;
-	}
-
-	let url = window.location.pathname.replace("/", "");
-	const res = await fetch(`/api/getDetail?url=${url}`);
-
-	if (res.status !== 200) {
-		window.location.replace("/ouch");
-	}
-
-	const { data } = await res.json();
-
-	if (data) render(data);
-
-	window.addEventListener("resize", () => {
-		if (data) render(data);
+	const repeat = calculateCharacterToFill({
+		text: previewTemplate.innerText,
+		fontSize: parseInt(previewTemplate.style.fontSize.replace("px", "")),
+		lineHeight: parseInt(previewTemplate.style.lineHeight.replace("px", "")),
+		width: previewTemplate.clientWidth,
+		height: previewTemplate.clientHeight,
+		family: previewTemplate.style.fontFamily,
 	});
 
-	function render(data: RenderedData[]) {
-		const { image, color, text, fontsize, fontfamily, lineheight, align } = data[0];
-		let characterToFill = calculateCharacterToFill({
-			text,
-			fontSize: fontsize,
-			lineHeight: lineheight,
-			width: preview.offsetWidth,
-			height: preview.offsetHeight,
-			family: fontfamily,
-		});
-
-		previewTemplate.innerText = text.repeat(characterToFill + 1);
-
-		previewTemplate.setAttribute(
-			"style",
-			`
-			width: 100%;
-			height: 100%;
-			font-size: ${fontsize}px;
-			font-family: ${fontfamily};
-			text-align: ${align};
-    		overflow: hidden;
-    		background: transparent url(${image}) center / cover no-repeat text;
-    		color: transparent;
-			white-space: break-spaces;
-    		word-break: break-all;
-			line-height: ${lineheight};
-			`
-		);
-
-		previewWindow.style.backgroundColor = color;
-	}
+	previewTemplate.innerText = previewTemplate.innerText.repeat(repeat + 1);
 </script>

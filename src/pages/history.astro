@@ -56,12 +56,12 @@ const sadKaomoji = [
 
 		<a
 			href="/"
-			class="card shadow-xl border-dashed border-4 border-base-content flex items-center justify-center opacity-50 hover:opacity-75 transition-all duration-500">
+			class="card min-h-[300px] shadow-xl border-dashed border-4 border-base-content flex items-center justify-center opacity-50 hover:opacity-75 transition-all duration-500">
 			<Icon name="fluent:add-12-filled" class="w-20 h-20 text-base-content p-4 rounded-full border-4" />
 		</a>
 	</div>
 	<template id="card">
-		<div class="card bg-base-200 shadow-xl h-72">
+		<div class="card bg-base-200 shadow-xl h-72 min-h-[300px]" id="">
 			<figure class="w-full object-contain">
 				<img src="/mem.jpg" alt="Shoes" class="w-full" />
 			</figure>
@@ -107,8 +107,9 @@ const sadKaomoji = [
 			return;
 		}
 
-		const res = await fetch(`/api/getPost?uid=${uid}`);
+		const res = await fetch(`/api/posts?uid=${uid}`);
 		const { data } = await res.json();
+
 		if (res.status !== 200 || !data || data.length === 0) {
 			notFound();
 			return;
@@ -118,27 +119,42 @@ const sadKaomoji = [
 			el.remove();
 		});
 
-		data.forEach((el: any) => {
+		data.forEach((el: any, i: number) => {
+			// Clone the template
 			const clone = cardTemplate.content.cloneNode(true) as HTMLDivElement;
+			// Set the id for deletion purposes
+			(clone.querySelector('div') as HTMLDivElement).id = "id" + i;
+
+			// Get the elements
 			const figure = clone.querySelector("figure")! as HTMLDivElement;
 			const img = figure.querySelector("img")! as HTMLImageElement;
 			const cardBody = clone.querySelector(".card-body")! as HTMLDivElement;
 			const p = cardBody.querySelector("p")! as HTMLParagraphElement;
+
+			// Get the buttons
 			const btns = cardBody.querySelectorAll("button")! as NodeListOf<HTMLButtonElement>;
+
 
 			img.src = el.image;
 			p.innerText = el.text.substring(0, 50) + "...";
+			target.insertBefore(clone, target.lastElementChild);
+
 			btns[0].addEventListener("click", async () => {
-				const res = await fetch(`/api/deletePost?id=${el.id}`);
-				if (res.status === 200) {
-					target.removeChild(clone);
+				const res = await fetch(`/api/post?id=${el.id}&uid=${uid}`, {
+					method: "DELETE",
+				});
+
+				if (res.status === 202) {
+					// Remove the element
+					document.getElementById("id" + i)!.remove();
+				} else {
+					alert("Something went wrong, please try again later.");
 				}
 			});
+			
 			btns[1].addEventListener("click", () => {
 				window.location.href = `/${el.url}`;
 			});
-
-			target.insertBefore(clone, target.lastElementChild);
 		});
 	};
 </script>

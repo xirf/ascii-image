@@ -53,7 +53,7 @@ import { Icon } from "astro-icon";
 		<Settings />
 	</section>
 
-	<dialog id="modal" class="modal modal-bottom sm:modal-middle">
+	<dialog id="modal" class="modal modal-bottom modal-open sm:modal-middle">
 		<div class="modal-box text-center">
 			<div class="success hidden" id="loadingModal">
 				<h3 class="font-bold text-xl">Please Wait 😇</h3>
@@ -62,18 +62,18 @@ import { Icon } from "astro-icon";
 				</p>
 				<span class="loading loading-dots loading-lg"></span>
 			</div>
-			<div class="success hidden" id="successModal">
+			<div class="success" id="successModal">
 				<h3 class="font-bold text-xl">Upload Complete 🥳</h3>
 				<p class="py-4 max-w-md">Here is your url, click to copy and share it with others.</p>
-				<div class="join">
-					<input class="input input-bordered join-item select-all" value="https://index" id="successLink" />
+				<div class="join w-full">
+					<input class="input input-bordered join-item select-all w-full" value="https://index" id="successLink" />
 					<button class="btn join-item col-span-2" id="copyButton">
 						<Icon name="lucide:copy" size="16" />
 						<span>Copy</span>
 					</button>
 				</div>
 				<div class="grid grid-cols-2 gap-4 mt-8">
-					<button class="btn btn-neutral"> 👀 History</button>
+					<a href="/history" class="btn btn-neutral"> 👀 History</a>
 					<button class="btn btn-success" id="closeButton"> ✨ Kembali</button>
 				</div>
 			</div>

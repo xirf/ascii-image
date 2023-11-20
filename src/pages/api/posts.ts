@@ -2,15 +2,17 @@ import type { APIRoute } from "astro";
 import supabase from "../../database/client";
 
 export const GET: APIRoute = (async ({ url }) => {
-    let userUrl = url.searchParams.get('url')
+    let UID = url.searchParams.get('uid')
     let { data, error } = await supabase
         .from('project')
-        .select('image, color, text, fontsize, fontfamily, lineheight, align')
-        .eq('url', userUrl)
+        .select('image, text, url, id')
+        .eq('uid', UID)
 
-    if (error || data?.length === 0) {
+    if (error || data?.length === 0 || data == null) {
         return new Response(JSON.stringify({ error: 'Not found' }), { status: 500 });
     }
+
+
 
     return new Response(JSON.stringify({ data }), { status: 200 });
 })
