@@ -1,12 +1,13 @@
 ---
 import type { MarkdownLayoutProps } from "astro";
+// @ts-ignore
 import Header from "../components/header.astro";
 
 type Props = MarkdownLayoutProps<{
 	title: string;
 }>;
 
-const { frontmatter, url } = Astro.props;
+const { frontmatter } = Astro.props;
 ---
 
 <html>

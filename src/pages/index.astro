@@ -230,7 +230,7 @@ import { Icon } from "astro-icon";
 		}, 1000);
 	}
 
-	buttonState.listen((state, change) => {
+	buttonState.listen((_, change) => {
 		if (change == "save") upload();
 	});
 

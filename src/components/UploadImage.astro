@@ -54,7 +54,7 @@ import Section from "./Section.astro";
 	};
 
 
-	colorInput.addEventListener("change", (e) => {
+	colorInput.addEventListener("change", () => {
 		pageState.setKey('color', colorInput.value);
 		colorTarget.style.backgroundColor = colorInput.value;
 	});
