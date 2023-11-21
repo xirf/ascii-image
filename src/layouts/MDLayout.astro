@@ -11,13 +11,16 @@ const { frontmatter } = Astro.props;
 
 <html>
 	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/clover.png" />
+		<meta name="viewport" content="width=device-width" />
 		<title>ACII - {frontmatter.title}</title>
 	</head>
 	<body class="m-0 p-0">
 		<div class="sticky top-0 left-0 w-full p-1">
 			<Header />
 		</div>
-		<div class="max-w-4xl m-auto bg-base-200 p-8 min-h-screen rounded-2xl">
+		<div class="w-screen max-w-4xl m-auto bg-base-200 p-8 min-h-screen rounded-2xl">
 			<h1 class="text-3xl font-bold">
 				{frontmatter.title}
 			</h1>
