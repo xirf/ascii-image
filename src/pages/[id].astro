@@ -1,4 +1,6 @@
 ---
+export const prerender = false;
+
 import supabase from "../database/client";
 import Layout from "../layouts/Default.astro";
 const pathName = new URL(Astro.request.url).pathname.replace("/", "");
