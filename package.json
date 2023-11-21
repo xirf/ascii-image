@@ -1,7 +1,9 @@
 {
-  "name": "aci",
+  "name": "ascii",
   "type": "module",
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "xirf",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -17,7 +19,6 @@
     "@supabase/supabase-js": "^2.38.4",
     "@types/node": "^20.9.1",
     "astro": "^3.5.5",
-    "astro-icon": "^0.8.1",
     "daisyui": "^4.4.2",
     "nanostores": "^0.9.5",
     "sharp": "^0.32.6",

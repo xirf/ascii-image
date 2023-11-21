@@ -1,5 +1,4 @@
 ---
-import { Icon } from "astro-icon";
 const align = ["left", "center", "right", "justify"];
 ---
 
@@ -11,14 +10,31 @@ const align = ["left", "center", "right", "justify"];
 			{Array.from({ length: 5 }, (_, i) => i + 1).map((i) => <span class="w-1 h-2 rounded-xl bg-base-content" />)}
 		</div> -->
 	</div>
-	<div class="flex flex-col space-y-2">
+	<div class="flex flex-col space-y-2 w-full">
 		<span class="text-sm font-semibold text-neutral-content opacity-50">Aligment</span>
-		<div class="join overflow-hidden">
+		<div class="join overflow-hidden w-full grid grid-cols-4">
 			{align.map((el) => <input type="radio" name="aligment" value={el} class="hidden" checked={el === "left"} id={el} />)}
 			{
 				align.map((el) => (
 					<label class={`${el === "left" && "btn-success"} btn join-item btn-sm`} id={el} for={el}>
-						<Icon pack="fluent" name={`text-align-${el}-20-filled`} size="24" />
+						<svg
+							stroke="currentColor"
+							fill="currentColor"
+							stroke-width="0"
+							viewBox="0 0 448 512"
+							height="1.1em"
+							width="1.1em"
+							xmlns="http://www.w3.org/2000/svg">
+							{el == "left" ? (
+								<path d="M288 64c0 17.7-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32H256c17.7 0 32 14.3 32 32zm0 256c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H256c17.7 0 32 14.3 32 32zM0 192c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 448c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" />
+							) : el == "center" ? (
+								<path d="M432 416H16a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-128H16a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-128H16a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-128H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z" />
+							) : el == "right" ? (
+								<path d="M448 64c0 17.7-14.3 32-32 32H192c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32zm0 256c0 17.7-14.3 32-32 32H192c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32zM0 192c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 448c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" />
+							) : (
+								<path d="M432 416H16a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-128H16a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-128H16a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-128H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z" />
+							)}
+						</svg>
 					</label>
 				))
 			}
