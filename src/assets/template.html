@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACII</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #preview-template {
+            font-size: <<fontSize>>;
+            font-family: <<fontFamily>>;
+            text-align: <<align>>;
+            overflow: hidden;
+            background: transparent url("<<image>>") center / cover no-repeat text;
+            color: transparent;
+            white-space: break-spaces;
+            word-break: break-all;
+            line-height: <<lineHeight>>;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="preview" style="background-color: <<color>>">
+        <div id="preview-template" class="w-full h-screen">
+
+        </div>
+</body>
+<script>
+    window.onload = () => {
+
+        const text = "<<text>>";
+        const previewTemplate = document.getElementById("preview-template");
+
+        function calculateCharacterToFill(options) {
+            console.log(options)
+            const { text, fontSize, lineHeight, width, height, family } = options;
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            const formattedFamily = family.replaceAll(" ", "-").toLowerCase();
+            ctx.font = `${fontSize}px ${formattedFamily}`;
+            const textWidth = ctx.measureText(text).width;
+            const textHeight = fontSize * lineHeight;
+            const textArea = textWidth * textHeight;
+            const viewArea = width * height;
+            const characters = Math.ceil(viewArea / textArea) || 1;
+            return characters;
+        }
+
+        let repeatCount = calculateCharacterToFill({
+            text,
+            fontSize: <<fontSize>>,
+            lineHeight: <<lineHeight>>,
+            width: window.innerWidth,
+            height: window.innerHeight,
+            family: "<<fontFamily>>"
+        })
+
+
+        console.log(repeatCount);
+
+        previewTemplate.innerText = text.repeat(repeatCount + 1);
+    }
+</script>
+
+</html>

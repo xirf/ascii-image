@@ -2,6 +2,9 @@ export const prerender = false;
 
 import type { APIRoute } from "astro";
 import supabase from "../../database/client";
+import { readFileSync } from "fs";
+import path from "path"
+
 
 export const DELETE: APIRoute = (async ({ url }) => {
     let params = url.searchParams
@@ -24,5 +27,11 @@ export const DELETE: APIRoute = (async ({ url }) => {
      * So we need to delete the image manually later
      * that's why we return 202 (Accepted)
      */
-    return new Response(JSON.stringify({ data}), { status: 202 });
+    return new Response(JSON.stringify({ data }), { status: 202 });
+})
+
+export const POST: APIRoute = (async ({ request }) => {
+    return new Response(JSON.stringify({
+        content: (await readFileSync(path.join(process.cwd(), "src", "assets", "template.html"), "utf-8"))
+    }))
 })

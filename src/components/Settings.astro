@@ -17,7 +17,7 @@ import UploadImage from "./UploadImage.astro";
 </div>
 
 <script>
-	import {buttonState} from "../store/store"
+	import { buttonState, pageState } from "../store/store";
 
 	const saveButton = document.getElementById("saveButton")! as HTMLButtonElement;
 	const getCodeButton = document.getElementById("getCodeButton")! as HTMLButtonElement;
@@ -26,11 +26,39 @@ import UploadImage from "./UploadImage.astro";
 		buttonState.setKey("save", true);
 	});
 
+	getCodeButton.addEventListener("click", async () => {
+		try {
+			let res = await fetch("/api/post", {
+				method: "POST",
+			});
 
-	getCodeButton.addEventListener("click", () => {
-		buttonState.setKey("getCode", true);
+			let { content } = await res.json();
+
+			if (!content) {
+				alert("An error happened, please try again.");
+				return;
+			}
+
+			const state: ReturnType<typeof pageState.get> = pageState.get();
+
+			// replace <<key>> with value
+			let template = content.replace(/<<(\w+)>>/g, (_: unknown, key: string) => {
+				// @ts-ignore - this is fine but yet such a pain
+				return state[key] as string;
+			});
+
+			// download the file
+			const element = document.createElement("a");
+			const file = new Blob([template], { type: "text/plain" });
+			element.href = URL.createObjectURL(file);
+			element.download = "index.html";
+			document.body.appendChild(element); // Required for this to work in FireFox
+			element.click();
+	
+
+			console.log(template);
+		} catch (error) {
+			alert("An error happened, please try again.");
+		}
 	});
-
-
-
 </script>
