@@ -1,7 +1,7 @@
 ---
 let {title, className }= Astro.props;
 
-title = title ?? Astro.url.pathname.replace(/\/$/, '').replace(/\/-/g, ' ').replace(/\//g, ' / ').replace("/", "")
+title = title || Astro.url.pathname.replace(/\/$/, '').replace(/\/-/g, ' ').replace(/\//g, ' / ').replace("/", "")
 ---
 
 <!doctype html>
