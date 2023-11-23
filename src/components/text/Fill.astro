@@ -39,7 +39,7 @@ let tales = fs
 
 	async function getTales(title: string): Promise<string> {
 		if (title === "Custom") return "";
-		let res = await fetch(`/api/tales/${title.replaceAll(" ", "-").toLowerCase()}`);
+		let res = await fetch(`/api/tales?title=${title.replaceAll(" ", "-").toLowerCase()}`);
 		if(res.status <= 200 && res.status >= 300){
 			return "something went wrong";
 		}
