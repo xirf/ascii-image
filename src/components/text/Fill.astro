@@ -9,7 +9,7 @@ String.prototype.toSentenceCase = function () {
 };
 
 let tales = fs
-	.readdirSync(fs.realpathSync("./src/assets/"))
+	.readdirSync(fs.realpathSync("./public/assets/"))
 	.filter((file) => file.endsWith(".txt"))
 	// @ts-ignore
 	.map((file) => file.replace(".txt", "").replaceAll("-", " ").toSentenceCase());
@@ -39,24 +39,24 @@ let tales = fs
 
 	async function getTales(title: string): Promise<string> {
 		if (title === "Custom") return "";
-		let res = await fetch(`/api/tales?title=${title.replaceAll(" ", "-").toLowerCase()}`);
-		if(res.status <= 200 && res.status >= 300){
+		let res = await fetch(`/assets/${title.replaceAll(" ", "-").toLowerCase()}.txt`);
+		if (res.status <= 200 && res.status >= 300) {
 			return "something went wrong";
 		}
 
-		return await res.json().then(json => json.content)
+		return (await res.text()).replaceAll("\n", " ").replaceAll("\r", " ").replaceAll("\t", " ").replaceAll("  ", " ");
 	}
 
 	template.addEventListener("change", async () => {
 		const title = template.value;
 		const tale = await getTales(title);
 		text.value = tale;
-		pageState.setKey('text', text.value);
+		pageState.setKey("text", text.value);
 	});
 
-	text.addEventListener('change', ()=>{
+	text.addEventListener("change", () => {
 		template.selectedIndex = 0;
-		text.value = text.value.replaceAll('\n', ' ');
-		pageState.setKey('text', text.value);
-	})
+		text.value = text.value.replaceAll("\n", " ");
+		pageState.setKey("text", text.value);
+	});
 </script>

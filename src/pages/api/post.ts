@@ -29,9 +29,3 @@ export const DELETE: APIRoute = (async ({ url }) => {
      */
     return new Response(JSON.stringify({ data }), { status: 202 });
 })
-
-export const POST: APIRoute = (async ({ request }) => {
-    return new Response(JSON.stringify({
-        content: (await readFileSync(path.join(process.cwd(), "src", "assets", "template.html"), "utf-8"))
-    }))
-})

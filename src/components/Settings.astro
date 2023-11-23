@@ -28,11 +28,9 @@ import UploadImage from "./UploadImage.astro";
 
 	getCodeButton.addEventListener("click", async () => {
 		try {
-			let res = await fetch("/api/post", {
-				method: "POST",
-			});
+			let res = await fetch("/assets/template.html");
 
-			let { content } = await res.json();
+			let content = await res.text();
 
 			if (!content) {
 				alert("An error happened, please try again.");
@@ -54,9 +52,6 @@ import UploadImage from "./UploadImage.astro";
 			element.download = "index.html";
 			document.body.appendChild(element); // Required for this to work in FireFox
 			element.click();
-	
-
-			console.log(template);
 		} catch (error) {
 			alert("An error happened, please try again.");
 		}
