@@ -33,13 +33,12 @@ const { image, color, text, fontsize, fontfamily, lineheight, align } = data[0];
 			background: url("${image}");
 			background-size: cover;
 			background-position: center;
-			-webkit-background-clip: text;
 			color: transparent;
 			white-space: break-spaces;
 			word-break: break-all;
 			line-height: ${lineheight};
 			background-clip: text;
-			--webkit-background-clip: text;
+			-webkit-background-clip: text;
 		`}>
 			{text}
 		</div>
