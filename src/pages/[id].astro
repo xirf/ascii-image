@@ -13,6 +13,7 @@ if (pathName === special) {
 const { data, error } = await supabase.from("project").select("image, color, text, fontsize, fontfamily, lineheight, align").eq("url", pathName);
 
 if (error || data?.length === 0) {
+	console.error(error);
 	return Astro.redirect("/ouch", 307);
 }
 
@@ -29,11 +30,16 @@ const { image, color, text, fontsize, fontfamily, lineheight, align } = data[0];
 			font-family: ${fontfamily};
 			text-align: ${align};
 			overflow: hidden;
-			background: transparent url(${image}) center / cover no-repeat text;
+			background: url("${image}");
+			background-size: cover;
+			background-position: center;
+			-webkit-background-clip: text;
 			color: transparent;
 			white-space: break-spaces;
 			word-break: break-all;
 			line-height: ${lineheight};
+			background-clip: text;
+			--webkit-background-clip: text;
 		`}>
 			{text}
 		</div>
